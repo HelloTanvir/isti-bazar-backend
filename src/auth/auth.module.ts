@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RefreshToken, RefreshTokenSchema, User, UserSchema } from './schema';
+import { AtStrategy, RtStrategy } from './strategies';
 
 @Module({
     imports: [
@@ -13,7 +14,7 @@ import { RefreshToken, RefreshTokenSchema, User, UserSchema } from './schema';
             { name: RefreshToken.name, schema: RefreshTokenSchema },
         ]),
     ],
-    providers: [AuthService],
+    providers: [AuthService, AtStrategy, RtStrategy],
     controllers: [AuthController],
 })
 export class AuthModule {}

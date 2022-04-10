@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { LoginDto, LogoutDto, SignUpDto } from './dto';
+import { LoginDto, SignUpDto } from './dto';
 import { RefreshToken, RefreshTokenDocument, User, UserDocument } from './schema';
 import { Tokens } from './types';
 
@@ -51,8 +51,6 @@ export class AuthService {
         // compare user password
         const isPasswordMatch = await bcrypt.compare(dto.password, user.password);
 
-        console.log({ isPasswordMatch, pass: dto.password, hash: user.password });
-
         if (!isPasswordMatch) {
             throw new ForbiddenException('invalid email or password');
         }
@@ -68,9 +66,9 @@ export class AuthService {
         return tokens;
     }
 
-    async logout(dto: LogoutDto): Promise<string> {
-        // delete refresh token from db
-        await this.refreshTokenModel.deleteOne({ userId: dto.userId });
+    async logout(userId: number | string): Promise<string> {
+        // update refresh token to null in db
+        await this.refreshTokenModel.updateOne({ userId }, { refreshToken: null });
 
         return 'logged out';
     }
