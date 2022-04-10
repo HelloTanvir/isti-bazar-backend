@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { GetCurrentUser, Public } from '../common/decorators';
 import { AuthService } from './auth.service';
 import { LoginDto, SignUpDto } from './dto';
+import { User } from './schema';
 import { Tokens } from './types';
 
 @Controller('auth')
@@ -28,5 +29,11 @@ export class AuthController {
         console.log({ userId });
 
         return this.authService.logout(userId);
+    }
+
+    @Get('get-me')
+    @HttpCode(HttpStatus.OK)
+    getMe(@GetCurrentUser('userId') userId: number | string): Promise<User> {
+        return this.authService.getMe(userId);
     }
 }

@@ -73,6 +73,10 @@ export class AuthService {
         return 'logged out';
     }
 
+    async getMe(userId: number | string): Promise<User> {
+        return await this.userModel.findById(userId, { password: 0 });
+    }
+
     private async getTokens(userId: number | string, email: string) {
         const [at, rt] = await Promise.all([
             // access token
