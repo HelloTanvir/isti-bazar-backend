@@ -6,7 +6,7 @@ export type RefreshTokenDocument = RefreshToken & Document;
 
 @Schema({ timestamps: true })
 export class RefreshToken {
-    @Prop({ type: SchemaTypes.ObjectId, required: [true, 'User id is required'] })
+    @Prop({ type: SchemaTypes.ObjectId, required: [true, 'User id is required'], unique: true })
     userId: Types.ObjectId;
 
     @Prop({ type: SchemaTypes.String, required: [true, 'Refresh token is required'] })
