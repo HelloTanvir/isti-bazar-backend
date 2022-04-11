@@ -69,6 +69,33 @@ export class AuthService {
         return await this.userModel.findById(userId, { password: 0 });
     }
 
+    async refreshTokens(userId: number | string, enteredRt: string): Promise<Tokens> {
+        // find user with userId from db
+        const user = await this.userModel.findById(userId);
+
+        if (!user || !user.refreshToken) {
+            throw new ForbiddenException('invalid refresh token');
+        }
+
+        // compare refresh token
+        const isRtMatch = await bcrypt.compare(enteredRt, user.refreshToken);
+
+        if (!isRtMatch) {
+            throw new ForbiddenException('invalid refresh token');
+        }
+
+        const tokens = await this.getTokens(user._id.toString());
+
+        // update refresh token in db
+        await this.updateRefreshToken(user._id.toString(), tokens.refresh_token);
+
+        return tokens;
+    }
+
+    private async updateRefreshToken(userId: number | string, rt: string | null): Promise<void> {
+        await this.userModel.findByIdAndUpdate(userId, { refreshToken: rt });
+    }
+
     private async getTokens(userId: number | string): Promise<Tokens> {
         const [at, rt] = await Promise.all([
             // access token
@@ -98,9 +125,5 @@ export class AuthService {
             access_token: at,
             refresh_token: rt,
         };
-    }
-
-    private async updateRefreshToken(userId: number | string, rt: string | null): Promise<void> {
-        await this.userModel.findByIdAndUpdate(userId, { refreshToken: rt });
     }
 }

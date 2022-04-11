@@ -1,5 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    // eslint-disable-next-line prettier/prettier
+    UseGuards
+} from '@nestjs/common';
 import { GetCurrentUser, Public } from '../common/decorators';
+import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { LoginDto, SignUpDto } from './dto';
 import { User } from './schema';
@@ -35,5 +46,16 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     getMe(@GetCurrentUser('userId') userId: number | string): Promise<User> {
         return this.authService.getMe(userId);
+    }
+
+    @Public()
+    @UseGuards(RtGuard)
+    @Post('refresh-token')
+    @HttpCode(HttpStatus.OK)
+    refreshToken(
+        @GetCurrentUser('userId') userId: number | string,
+        @GetCurrentUser('refreshToken') refreshToken: string
+    ): Promise<Tokens> {
+        return this.authService.refreshTokens(userId, refreshToken);
     }
 }
