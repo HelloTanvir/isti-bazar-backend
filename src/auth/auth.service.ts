@@ -66,7 +66,7 @@ export class AuthService {
     }
 
     async getMe(userId: number | string): Promise<User> {
-        return await this.userModel.findById(userId, { password: 0 });
+        return await this.userModel.findById(userId, { password: 0, refreshToken: 0 });
     }
 
     async refreshTokens(userId: number | string, enteredRt: string): Promise<Tokens> {
