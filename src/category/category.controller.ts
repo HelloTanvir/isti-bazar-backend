@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto, CategoryUpdateDto } from './dto';
 import { Category } from './schema';
@@ -29,5 +29,11 @@ export class CategoryController {
     @HttpCode(HttpStatus.OK)
     update(@Param('id') id: string | number, @Body() dto: CategoryUpdateDto): Promise<Category> {
         return this.categoryService.update(id, dto);
+    }
+
+    @Delete('/:id')
+    @HttpCode(HttpStatus.OK)
+    delete(@Param('id') id: string | number): Promise<Category> {
+        return this.categoryService.delete(id);
     }
 }

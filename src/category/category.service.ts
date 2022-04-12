@@ -47,4 +47,15 @@ export class CategoryService {
 
         return category;
     }
+
+    async delete(id: string | number): Promise<Category> {
+        const category = await this.categoryModel.findById(id);
+        if (!category) {
+            throw new ForbiddenException('category does not exist');
+        }
+
+        await category.remove();
+
+        return category;
+    }
 }
