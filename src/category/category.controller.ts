@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dto';
 import { Category } from './schema';
@@ -11,5 +11,11 @@ export class CategoryController {
     @HttpCode(HttpStatus.CREATED)
     create(@Body() dto: CategoryDto): Promise<Category> {
         return this.categoryService.create(dto);
+    }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    findAll(): Promise<Category[]> {
+        return this.categoryService.findAll();
     }
 }
