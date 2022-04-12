@@ -16,6 +16,9 @@ export class User {
     })
     email: string;
 
+    @Prop({ type: SchemaTypes.String, required: [true, 'User phone number is required'] })
+    phoneNumber: string;
+
     @Prop({ type: SchemaTypes.String, required: [true, 'User password is required'] })
     password: string;
 
