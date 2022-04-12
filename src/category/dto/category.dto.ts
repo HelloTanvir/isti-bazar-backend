@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class LoginDto {
+export class CategoryDto {
     @IsNotEmpty()
     @IsString()
     name: string;
