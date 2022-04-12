@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CategoryDto } from './dto';
@@ -11,11 +11,15 @@ export class CategoryService {
     ) {}
 
     async create(dto: CategoryDto): Promise<Category> {
-        const category = new this.categoryModel(dto);
+        const category = await this.categoryModel.findOne({ name: dto.name });
+        if (category) {
+            throw new ForbiddenException('category already exists');
+        }
 
-        await category.save();
+        const newCategory = new this.categoryModel(dto);
+        await newCategory.save();
 
-        return category;
+        return newCategory;
     }
 
     async findAll(): Promise<Category[]> {
