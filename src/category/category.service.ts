@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CategoryDto } from './dto';
+import { CategoryDto, CategoryUpdateDto } from './dto';
 import { Category, CategoryDocument } from './schema';
 
 @Injectable()
@@ -28,5 +28,23 @@ export class CategoryService {
 
     async findOne(id: string | number): Promise<Category> {
         return await this.categoryModel.findById(id);
+    }
+
+    async update(id: string | number, dto: CategoryUpdateDto): Promise<Category> {
+        const category = await this.categoryModel.findById(id);
+        if (!category) {
+            throw new ForbiddenException('category does not exist');
+        }
+
+        if (dto.name) {
+            category.name = dto.name;
+        }
+        if (dto.stock) {
+            category.stock = dto.stock;
+        }
+
+        await category.save();
+
+        return category;
     }
 }

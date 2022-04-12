@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CategoryDto } from './dto';
+import { CategoryDto, CategoryUpdateDto } from './dto';
 import { Category } from './schema';
 
 @Controller('categories')
@@ -23,5 +23,11 @@ export class CategoryController {
     @HttpCode(HttpStatus.OK)
     findOne(@Param('id') id: string | number): Promise<Category> {
         return this.categoryService.findOne(id);
+    }
+
+    @Post('/:id')
+    @HttpCode(HttpStatus.OK)
+    update(@Param('id') id: string | number, @Body() dto: CategoryUpdateDto): Promise<Category> {
+        return this.categoryService.update(id, dto);
     }
 }
