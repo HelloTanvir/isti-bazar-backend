@@ -93,6 +93,11 @@ export class AuthService {
     }
 
     private async updateRefreshToken(userId: number | string, rt: string | null): Promise<void> {
+        if (rt) {
+            const salt = await bcrypt.genSalt(10);
+            rt = await bcrypt.hash(rt, salt);
+        }
+
         await this.userModel.findByIdAndUpdate(userId, { refreshToken: rt });
     }
 
