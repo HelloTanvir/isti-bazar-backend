@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { PassportStrategy } from '@nestjs/passport';
@@ -22,7 +22,7 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
         const user = await this.userModel.findById(payload['userId']);
 
         if (!user || !user.refreshToken) {
-            throw new ForbiddenException('invalid user');
+            throw new UnauthorizedException();
         }
 
         return payload;
