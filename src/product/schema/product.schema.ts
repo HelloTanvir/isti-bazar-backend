@@ -8,8 +8,8 @@ export class Product {
     @Prop({ type: SchemaTypes.String, required: [true, 'Product name is required'] })
     name: string;
 
-    @Prop({ type: SchemaTypes.String, required: [true, 'Product image is required'] })
-    image: string;
+    @Prop({ type: [SchemaTypes.String], required: [true, 'Product images are required'] })
+    images: string[];
 
     @Prop({ type: SchemaTypes.String, required: [true, 'Product code is required'], unique: true })
     code: string;
