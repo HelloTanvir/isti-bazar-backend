@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { AtGuard } from './common/guards';
 import { MongooseConfigService } from './mongoose/mongoose-config.service';
 import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { CategoryModule } from './category/category.module';
         }),
         AuthModule,
         CategoryModule,
+        ProductModule,
     ],
     providers: [
         {
