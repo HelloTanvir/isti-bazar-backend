@@ -12,7 +12,7 @@ import {
     UseInterceptors
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ProductDto } from './dto';
+import { ProductDto, ProductUpdateDto } from './dto';
 import { ProductService } from './product.service';
 import { Product } from './schema';
 import { HttpExceptionFilter, imageUploadOptions } from './utils';
@@ -42,5 +42,17 @@ export class ProductController {
     @HttpCode(HttpStatus.OK)
     findOne(@Param('id') id: string | number): Promise<Product> {
         return this.productService.findOne(id);
+    }
+
+    @Post('/:id')
+    @HttpCode(HttpStatus.OK)
+    @UseFilters(HttpExceptionFilter)
+    @UseInterceptors(FilesInterceptor('images', 5, imageUploadOptions))
+    update(
+        @Param('id') id: string | number,
+        @Body() dto: ProductUpdateDto,
+        @UploadedFiles() images: Array<Express.Multer.File>
+    ): Promise<Product> {
+        return this.productService.update(id, dto, images);
     }
 }

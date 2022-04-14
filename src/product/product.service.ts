@@ -2,8 +2,9 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../category/schema';
-import { ProductDto } from './dto';
+import { ProductDto, ProductUpdateDto } from './dto';
 import { Product, ProductDocument } from './schema';
+import { deleteFile } from './utils';
 
 @Injectable()
 export class ProductService {
@@ -45,5 +46,46 @@ export class ProductService {
 
     async findOne(id: string | number): Promise<Product> {
         return await this.productModel.findById(id);
+    }
+
+    async update(
+        id: string | number,
+        dto: ProductUpdateDto,
+        images: Express.Multer.File[]
+    ): Promise<Product> {
+        const product = await this.productModel.findById(id);
+        if (!product) {
+            throw new ForbiddenException('product does not exist');
+        }
+
+        if (dto.category) {
+            const category = await this.categoryModel.findOne({ name: dto.category });
+            if (!category) {
+                throw new ForbiddenException('category does not exist');
+            }
+        }
+
+        product.name = dto.name;
+        product.code = dto.code;
+        product.category = dto.category;
+        product.price = dto.price;
+        product.stock = dto.stock;
+        product.size = dto.size;
+        product.color = dto.color;
+        product.description = dto.description;
+
+        if (images.length) {
+            // delete old files first
+            product.images.forEach(async (image: string) => {
+                await deleteFile(image);
+            });
+
+            // override new image paths
+            product.images = images.map((image) => image.path);
+        }
+
+        await product.save();
+
+        return product;
     }
 }
