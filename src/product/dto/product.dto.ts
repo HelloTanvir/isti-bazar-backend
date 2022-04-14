@@ -14,8 +14,12 @@ export class ProductDto {
     category: string;
 
     @IsNotEmpty()
-    @IsString()
-    description: string;
+    @IsNumberString()
+    price: number;
+
+    @IsNotEmpty()
+    @IsNumberString()
+    stock: number;
 
     @IsNotEmpty()
     @IsString()
@@ -26,6 +30,6 @@ export class ProductDto {
     color: string;
 
     @IsNotEmpty()
-    @IsNumberString()
-    stock: number;
+    @IsString()
+    description: string;
 }
