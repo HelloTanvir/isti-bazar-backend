@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     HttpCode,
     HttpStatus,
     Post,
@@ -28,5 +29,11 @@ export class ProductController {
         @UploadedFiles() images: Array<Express.Multer.File>
     ): Promise<Product> {
         return this.productService.create(dto, images);
+    }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    findAll(): Promise<Product[]> {
+        return this.productService.findAll();
     }
 }

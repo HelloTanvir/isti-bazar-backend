@@ -38,4 +38,8 @@ export class ProductService {
 
         return newProduct;
     }
+
+    async findAll(): Promise<Product[]> {
+        return await this.productModel.find();
+    }
 }
