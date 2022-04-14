@@ -65,14 +65,14 @@ export class ProductService {
             }
         }
 
-        product.name = dto.name;
-        product.code = dto.code;
-        product.category = dto.category;
-        product.price = dto.price;
-        product.stock = dto.stock;
-        product.size = dto.size;
-        product.color = dto.color;
-        product.description = dto.description;
+        product.name = dto.name || product.name;
+        product.code = dto.code || product.code;
+        product.category = dto.category || product.category;
+        product.price = dto.price || product.price;
+        product.stock = dto.stock || product.stock;
+        product.size = dto.size || product.size;
+        product.color = dto.color || product.color;
+        product.description = dto.description || product.description;
 
         if (images.length) {
             // delete old files first
