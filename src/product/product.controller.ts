@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -54,5 +55,11 @@ export class ProductController {
         @UploadedFiles() images: Array<Express.Multer.File>
     ): Promise<Product> {
         return this.productService.update(id, dto, images);
+    }
+
+    @Delete('/:id')
+    @HttpCode(HttpStatus.OK)
+    delete(@Param('id') id: string | number): Promise<Product> {
+        return this.productService.delete(id);
     }
 }

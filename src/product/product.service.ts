@@ -88,4 +88,21 @@ export class ProductService {
 
         return product;
     }
+
+    async delete(id: string | number): Promise<Product> {
+        const product = await this.productModel.findById(id);
+        if (!product) {
+            throw new ForbiddenException('product does not exist');
+        }
+
+        // delete images
+        product.images.forEach(async (image: string) => {
+            await deleteFile(image);
+        });
+
+        // delete product
+        await product.remove();
+
+        return product;
+    }
 }
