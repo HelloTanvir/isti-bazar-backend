@@ -13,13 +13,20 @@ export class ProductService {
             throw new ForbiddenException('Product images are required');
         }
 
+        const product = await this.productModel.findOne({ code: dto.code });
+        if (product) {
+            throw new ForbiddenException('product code already exists');
+        }
+
         const imagePaths = images.map((image) => image.path);
 
-        const product = new this.productModel({
+        const newProduct = new this.productModel({
             ...dto,
             images: imagePaths,
         });
 
-        return product;
+        await newProduct.save();
+
+        return newProduct;
     }
 }
