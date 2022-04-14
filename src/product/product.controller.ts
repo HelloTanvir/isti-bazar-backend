@@ -5,6 +5,7 @@ import {
     HttpStatus,
     Post,
     UploadedFiles,
+    UseFilters,
     // eslint-disable-next-line prettier/prettier
     UseInterceptors
 } from '@nestjs/common';
@@ -12,7 +13,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductDto } from './dto';
 import { ProductService } from './product.service';
 import { Product } from './schema';
-import { imageUploadOptions } from './utils';
+import { HttpExceptionFilter, imageUploadOptions } from './utils';
 
 @Controller('products')
 export class ProductController {
@@ -20,6 +21,7 @@ export class ProductController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
+    @UseFilters(HttpExceptionFilter)
     @UseInterceptors(FilesInterceptor('images', 5, imageUploadOptions))
     create(
         @Body() dto: ProductDto,
