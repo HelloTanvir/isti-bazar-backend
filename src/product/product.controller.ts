@@ -4,6 +4,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Param,
     Post,
     UploadedFiles,
     UseFilters,
@@ -35,5 +36,11 @@ export class ProductController {
     @HttpCode(HttpStatus.OK)
     findAll(): Promise<Product[]> {
         return this.productService.findAll();
+    }
+
+    @Get('/:id')
+    @HttpCode(HttpStatus.OK)
+    findOne(@Param('id') id: string | number): Promise<Product> {
+        return this.productService.findOne(id);
     }
 }
