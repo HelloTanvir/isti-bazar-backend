@@ -1,5 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { OrderDto } from './dto';
+import { OrderUpdateDto } from './dto/order-update.dto';
 import { OrderService } from './order.service';
 import { Order } from './schema';
 
@@ -23,5 +24,11 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id') id: string | number): Promise<Order> {
         return await this.orderService.findOne(id);
+    }
+
+    @Post('/:id')
+    @HttpCode(HttpStatus.OK)
+    async update(@Param('id') id: string | number, @Body() dto: OrderUpdateDto): Promise<Order> {
+        return await this.orderService.update(id, dto);
     }
 }

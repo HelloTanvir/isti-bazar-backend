@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product, ProductDocument } from '../product/schema';
 import { OrderDto } from './dto';
+import { OrderUpdateDto } from './dto/order-update.dto';
 import { Order, OrderDocument } from './schema';
 
 @Injectable()
@@ -30,5 +31,19 @@ export class OrderService {
 
     async findOne(id: string | number): Promise<Order> {
         return await this.orderModel.findById(id);
+    }
+
+    async update(id: string | number, dto: OrderUpdateDto): Promise<Order> {
+        const order = await this.orderModel.findById(id);
+        if (!order) {
+            throw new ForbiddenException('order does not exist');
+        }
+
+        const newOrder: Order = {
+            ...order,
+            ...dto,
+        };
+
+        return await this.orderModel.findByIdAndUpdate(id, newOrder, { new: true });
     }
 }
