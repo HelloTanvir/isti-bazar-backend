@@ -65,15 +65,6 @@ export class ProductService {
             }
         }
 
-        product.name = dto.name || product.name;
-        product.code = dto.code || product.code;
-        product.category = dto.category || product.category;
-        product.price = dto.price || product.price;
-        product.stock = dto.stock || product.stock;
-        product.size = dto.size || product.size;
-        product.color = dto.color || product.color;
-        product.description = dto.description || product.description;
-
         if (images.length) {
             // delete old files first
             product.images.forEach(async (image: string) => {
@@ -84,9 +75,12 @@ export class ProductService {
             product.images = images.map((image) => image.path);
         }
 
-        await product.save();
+        const newProduct = {
+            ...product,
+            ...dto,
+        };
 
-        return product;
+        return await this.productModel.findByIdAndUpdate(id, newProduct, { new: true });
     }
 
     async delete(id: string | number): Promise<Product> {
