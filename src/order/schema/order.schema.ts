@@ -31,6 +31,10 @@ export class Order {
     // delivery details
     @Prop({ type: SchemaTypes.String, required: [true, 'Customer address is required'] })
     address: string;
+
+    // status
+    @Prop({ type: SchemaTypes.String, default: 'pending' })
+    status: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
