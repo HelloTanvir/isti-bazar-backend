@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product, ProductDocument } from '../product/schema';
@@ -13,6 +13,13 @@ export class OrderService {
     ) {}
 
     async create(dto: OrderDto): Promise<Order> {
+        dto.products.forEach(async (p) => {
+            const product = await this.productModel.findById(p.id);
+            if (!product) {
+                throw new ForbiddenException('product does not exist');
+            }
+        });
+
         const newOrder = new this.orderModel(dto);
         return newOrder.save();
     }
