@@ -23,4 +23,8 @@ export class OrderService {
         const newOrder = new this.orderModel(dto);
         return newOrder.save();
     }
+
+    async findAll(): Promise<Order[]> {
+        return await this.orderModel.find();
+    }
 }
