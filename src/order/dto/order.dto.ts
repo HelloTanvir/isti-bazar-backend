@@ -1,10 +1,11 @@
 import { IsArray, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
 
 class ProductInfo {
-    @IsNotEmpty({ message: 'Product id is required' })
+    @IsNotEmpty()
+    @IsString()
     id: string;
 
-    @IsNotEmpty({ message: 'Product quantity is required' })
+    @IsNotEmpty()
     @IsNumberString({ message: 'Product quantity must be a number' })
     quantity: string;
 }
