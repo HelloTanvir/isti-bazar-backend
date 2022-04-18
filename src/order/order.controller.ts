@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { OrderDto } from './dto';
 import { OrderService } from './order.service';
 import { Order } from './schema';
@@ -17,5 +17,11 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     async findAll(): Promise<Order[]> {
         return await this.orderService.findAll();
+    }
+
+    @Get('/:id')
+    @HttpCode(HttpStatus.OK)
+    async findOne(@Param('id') id: string | number): Promise<Order> {
+        return await this.orderService.findOne(id);
     }
 }
