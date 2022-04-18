@@ -46,4 +46,15 @@ export class OrderService {
 
         return await this.orderModel.findByIdAndUpdate(id, newOrder, { new: true });
     }
+
+    async delete(id: string | number): Promise<Order> {
+        const order = await this.orderModel.findById(id);
+        if (!order) {
+            throw new ForbiddenException('order does not exist');
+        }
+
+        await order.remove();
+
+        return order;
+    }
 }

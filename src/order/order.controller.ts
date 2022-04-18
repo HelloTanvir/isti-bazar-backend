@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { OrderDto } from './dto';
 import { OrderUpdateDto } from './dto/order-update.dto';
 import { OrderService } from './order.service';
@@ -30,5 +30,11 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     async update(@Param('id') id: string | number, @Body() dto: OrderUpdateDto): Promise<Order> {
         return await this.orderService.update(id, dto);
+    }
+
+    @Delete('/:id')
+    @HttpCode(HttpStatus.OK)
+    async delete(@Param('id') id: string | number): Promise<Order> {
+        return await this.orderService.delete(id);
     }
 }
