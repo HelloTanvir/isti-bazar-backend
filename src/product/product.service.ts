@@ -72,15 +72,10 @@ export class ProductService {
             });
 
             // override new image paths
-            product.images = images.map((image) => image.path);
+            (dto as any).images = images.map((image) => image.path);
         }
 
-        const newProduct = {
-            ...product,
-            ...dto,
-        };
-
-        return await this.productModel.findByIdAndUpdate(id, newProduct, { new: true });
+        return await this.productModel.findByIdAndUpdate(id, dto, { new: true });
     }
 
     async delete(id: string | number): Promise<Product> {

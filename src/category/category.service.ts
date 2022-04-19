@@ -36,16 +36,7 @@ export class CategoryService {
             throw new ForbiddenException('category does not exist');
         }
 
-        if (dto.name) {
-            category.name = dto.name;
-        }
-        if (dto.stock) {
-            category.stock = dto.stock;
-        }
-
-        await category.save();
-
-        return category;
+        return await this.categoryModel.findByIdAndUpdate(id, dto, { new: true });
     }
 
     async delete(id: string | number): Promise<Category> {
