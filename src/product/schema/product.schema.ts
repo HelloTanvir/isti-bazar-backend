@@ -11,6 +11,9 @@ export class Product {
     @Prop({ type: [SchemaTypes.String], required: [true, 'Product images are required'] })
     images: string[];
 
+    @Prop({ type: [SchemaTypes.String], required: [true, 'Product image keys are required'] })
+    keys: string[];
+
     @Prop({ type: SchemaTypes.String, required: [true, 'Product code is required'], unique: true })
     code: string;
 

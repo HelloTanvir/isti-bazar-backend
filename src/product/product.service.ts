@@ -4,13 +4,14 @@ import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../category/schema';
 import { ProductDto, ProductUpdateDto } from './dto';
 import { Product, ProductDocument } from './schema';
-import { deleteFile } from './utils';
+import { StorageService } from './utils';
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectModel(Product.name) private readonly productModel: Model<ProductDocument>,
-        @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>
+        @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>,
+        private readonly storageService: StorageService
     ) {}
 
     async create(dto: ProductDto, images: Express.Multer.File[]): Promise<Product> {
@@ -28,11 +29,19 @@ export class ProductService {
             throw new ForbiddenException('category does not exist');
         }
 
-        const imagePaths = images.map((image) => image.path);
+        const imagePaths: string[] = [];
+        const keys: string[] = [];
+
+        for (const image of images) {
+            const { location, key } = await this.storageService.uploadFile(image);
+            imagePaths.push(location);
+            keys.push(key);
+        }
 
         const newProduct = new this.productModel({
             ...dto,
             images: imagePaths,
+            keys,
         });
 
         await newProduct.save();
@@ -67,12 +76,22 @@ export class ProductService {
 
         if (images.length) {
             // delete old files first
-            product.images.forEach(async (image: string) => {
-                await deleteFile(image);
-            });
+            for (const key of product.keys) {
+                await this.storageService.deleteFile(key);
+            }
+
+            const imagePaths: string[] = [];
+            const keys: string[] = [];
 
             // override new image paths
-            (dto as any).images = images.map((image) => image.path);
+            for (const image of images) {
+                const { location, key } = await this.storageService.uploadFile(image);
+                imagePaths.push(location);
+                keys.push(key);
+            }
+
+            (dto as any).images = imagePaths;
+            (dto as any).keys = keys;
         }
 
         return await this.productModel.findByIdAndUpdate(id, dto, { new: true });
@@ -85,9 +104,9 @@ export class ProductService {
         }
 
         // delete images
-        product.images.forEach(async (image: string) => {
-            await deleteFile(image);
-        });
+        for (const key of product.keys) {
+            await this.storageService.deleteFile(key);
+        }
 
         // delete product
         await product.remove();
