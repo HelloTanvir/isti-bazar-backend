@@ -17,7 +17,7 @@ export class StorageService {
             Date.now();
 
         const params = {
-            Bucket: this.configService.get('AWS_BUCKET_NAME'),
+            Bucket: this.configService.get('AWS_S3_BUCKET'),
             Key: fileName + fileExt,
             Body: file.buffer,
         };
@@ -34,7 +34,7 @@ export class StorageService {
         const s3 = this.getS3();
 
         const params = {
-            Bucket: this.configService.get('AWS_BUCKET_NAME'),
+            Bucket: this.configService.get('AWS_S3_BUCKET'),
             Key: filePath,
         };
 
@@ -43,9 +43,9 @@ export class StorageService {
 
     getS3(): S3 {
         return new S3({
-            accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-            secretAccessKey: this.configService.get('AWS_SECRET_KEY'),
-            region: this.configService.get('AWS_REGION'),
+            accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
+            secretAccessKey: this.configService.get('AWS_S3_SECRET_KEY'),
+            region: this.configService.get('AWS_S3_REGION'),
         });
     }
 }
