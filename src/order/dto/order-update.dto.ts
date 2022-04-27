@@ -25,11 +25,6 @@ export class OrderUpdateDto {
 
     @IsOptional()
     @IsNotEmpty()
-    @IsString()
-    address: string;
-
-    @IsOptional()
-    @IsNotEmpty()
     @IsArray()
     products: ProductInfo[];
 
@@ -37,4 +32,29 @@ export class OrderUpdateDto {
     @IsNotEmpty()
     @IsString()
     status: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    address: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    city: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    zone: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    deliveryTime: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsNumberString()
+    total: string;
 }

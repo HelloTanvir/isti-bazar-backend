@@ -20,10 +20,26 @@ export class OrderDto {
     number: string;
 
     @IsNotEmpty()
+    @IsArray()
+    products: ProductInfo[];
+
+    @IsNotEmpty()
     @IsString()
     address: string;
 
     @IsNotEmpty()
-    @IsArray()
-    products: ProductInfo[];
+    @IsString()
+    city: string;
+
+    @IsNotEmpty()
+    @IsString()
+    zone: string;
+
+    @IsNotEmpty()
+    @IsString()
+    deliveryTime: string;
+
+    @IsNotEmpty()
+    @IsNumberString()
+    total: string;
 }
