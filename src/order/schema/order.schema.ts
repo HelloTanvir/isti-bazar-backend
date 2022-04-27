@@ -32,9 +32,22 @@ export class Order {
     @Prop({ type: SchemaTypes.String, required: [true, 'Customer address is required'] })
     address: string;
 
+    @Prop({ type: SchemaTypes.String, required: [true, 'Customer city is required'] })
+    city: string;
+
+    @Prop({ type: SchemaTypes.String, required: [true, 'Customer zone is required'] })
+    zone: string;
+
+    @Prop({ type: SchemaTypes.String, required: [true, 'Delivery is required'] })
+    deliveryTime: string;
+
     // status
     @Prop({ type: SchemaTypes.String, default: 'pending' })
     status: string;
+
+    // cart total
+    @Prop({ type: SchemaTypes.Number, required: [true, 'Cart total is required'] })
+    total: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
