@@ -1,4 +1,18 @@
-import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+
+class Variants {
+    @IsNotEmpty()
+    @IsString()
+    size: string;
+
+    @IsNotEmpty()
+    @IsString()
+    color: string;
+
+    @IsNotEmpty()
+    @IsNumberString({ message: 'Variant stock must be a number' })
+    stock: number;
+}
 
 export class ProductDto {
     @IsNotEmpty()
@@ -15,7 +29,11 @@ export class ProductDto {
 
     @IsNotEmpty()
     @IsNumberString()
-    price: number;
+    buyingPrice: number;
+
+    @IsNotEmpty()
+    @IsNumberString()
+    sellingPrice: number;
 
     @IsNotEmpty()
     @IsNumberString()
@@ -23,13 +41,9 @@ export class ProductDto {
 
     @IsNotEmpty()
     @IsString()
-    size: string;
-
-    @IsNotEmpty()
-    @IsString()
-    color: string;
-
-    @IsNotEmpty()
-    @IsString()
     description: string;
+
+    @IsNotEmpty()
+    @IsArray()
+    variants: Variants[];
 }
