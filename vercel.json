@@ -10,10 +10,12 @@
     {
       "src": "/(.*)",
       "headers": {
-        "Access-Control-Allow-Origin": "https://isti-bazar.vercel.app",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
         "Access-Control-Allow-Credentials": "true"
       },
+      "dest": "src/main.ts",
+      "methods": ["GET", "POST", "PUT", "DELETE"],
       "continue": true
     },
     {
