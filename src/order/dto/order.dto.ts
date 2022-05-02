@@ -1,4 +1,5 @@
-import { IsArray, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsNumberString, IsString, ValidateNested } from 'class-validator';
 
 class ProductInfo {
     @IsNotEmpty()
@@ -21,6 +22,8 @@ export class OrderDto {
 
     @IsNotEmpty()
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProductInfo)
     products: ProductInfo[];
 
     @IsNotEmpty()

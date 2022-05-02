@@ -1,4 +1,13 @@
-import { IsArray, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+    IsArray,
+    IsNotEmpty,
+    IsNumberString,
+    IsOptional,
+    IsString,
+    // eslint-disable-next-line prettier/prettier
+    ValidateNested
+} from 'class-validator';
 
 class ProductInfo {
     @IsOptional()
@@ -26,6 +35,8 @@ export class OrderUpdateDto {
     @IsOptional()
     @IsNotEmpty()
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProductInfo)
     products: ProductInfo[];
 
     @IsOptional()
