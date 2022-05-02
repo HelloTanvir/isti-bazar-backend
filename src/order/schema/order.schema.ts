@@ -13,6 +13,17 @@ class ProductInfo {
         min: [1, 'Product quantity must be greater than 0'],
     })
     quantity: string;
+
+    // optional variant details
+    @Prop({
+        type: SchemaTypes.String,
+    })
+    size: string;
+
+    @Prop({
+        type: SchemaTypes.String,
+    })
+    color: string;
 }
 
 @Schema({ timestamps: true })

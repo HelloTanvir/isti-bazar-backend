@@ -1,5 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsNumberString, IsString, ValidateNested } from 'class-validator';
+import {
+    IsArray,
+    IsNotEmpty,
+    IsNumberString,
+    IsOptional,
+    IsString,
+    // eslint-disable-next-line prettier/prettier
+    ValidateNested
+} from 'class-validator';
 
 class ProductInfo {
     @IsNotEmpty()
@@ -9,6 +17,17 @@ class ProductInfo {
     @IsNotEmpty()
     @IsNumberString({ message: 'Product quantity must be a number' })
     quantity: string;
+
+    // optional variant details
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    size: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    color: string;
 }
 
 export class OrderDto {

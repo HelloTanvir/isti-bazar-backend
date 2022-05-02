@@ -19,6 +19,16 @@ class ProductInfo {
     @IsNotEmpty({ message: 'Product quantity is required' })
     @IsNumberString({ message: 'Product quantity must be a number' })
     quantity: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    size: string;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    color: string;
 }
 
 export class OrderUpdateDto {
