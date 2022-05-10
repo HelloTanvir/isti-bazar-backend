@@ -11,5 +11,5 @@ export class CategoryDto {
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => String)
-    subCategory: string[];
+    subCategories: string[];
 }
