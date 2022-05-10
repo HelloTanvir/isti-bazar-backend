@@ -16,8 +16,8 @@ export class Category {
 
     @Prop({
         type: SchemaTypes.Number,
-        required: [true, 'Stock is required'],
         min: [0, 'Stock must be greater than 0'],
+        default: 0,
     })
     stock: number;
 }
