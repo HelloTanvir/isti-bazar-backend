@@ -1,11 +1,15 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 export class CategoryDto {
     @IsNotEmpty()
     @IsString()
     name: string;
 
+    @IsOptional()
     @IsNotEmpty()
-    @IsNumber()
-    stock: number;
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => String)
+    subCategory: string[];
 }
