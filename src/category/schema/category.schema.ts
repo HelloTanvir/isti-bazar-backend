@@ -9,6 +9,12 @@ export class Category {
     name: string;
 
     @Prop({
+        type: [SchemaTypes.String],
+        default: [],
+    })
+    subCategories: string[];
+
+    @Prop({
         type: SchemaTypes.Number,
         required: [true, 'Stock is required'],
         min: [0, 'Stock must be greater than 0'],
