@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CategoryDto {
     @IsNotEmpty()
@@ -9,7 +8,5 @@ export class CategoryDto {
     @IsOptional()
     @IsNotEmpty()
     @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => String)
     subCategories: string[];
 }
