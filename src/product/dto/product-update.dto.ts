@@ -45,22 +45,17 @@ export class ProductUpdateDto {
     @IsOptional()
     @IsNotEmpty()
     @IsNumberString()
-    price: number;
+    buyingPrice: number;
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsNumberString()
+    sellingPrice: number;
 
     @IsOptional()
     @IsNotEmpty()
     @IsNumberString()
     stock: number;
-
-    @IsOptional()
-    @IsNotEmpty()
-    @IsString()
-    size: string;
-
-    @IsOptional()
-    @IsNotEmpty()
-    @IsString()
-    color: string;
 
     @IsOptional()
     @IsNotEmpty()
