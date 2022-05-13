@@ -69,7 +69,7 @@ export class ProductUpdateDto {
 
     @IsOptional()
     @IsNotEmpty()
-    @Transform(({ value }) => JSON.parse(value))
+    @Transform(({ value }) => JSON.parse(value), { toClassOnly: true })
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => Variants)
