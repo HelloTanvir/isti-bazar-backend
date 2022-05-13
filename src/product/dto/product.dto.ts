@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumberString, IsString, ValidateNested } from 'class-validator';
 
 class Variants {
@@ -45,6 +45,7 @@ export class ProductDto {
     description: string;
 
     @IsNotEmpty()
+    @Transform(({ value }) => JSON.parse(value))
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => Variants)

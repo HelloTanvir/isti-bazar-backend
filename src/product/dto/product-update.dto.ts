@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
     IsArray,
     IsNotEmpty,
@@ -69,6 +69,7 @@ export class ProductUpdateDto {
 
     @IsOptional()
     @IsNotEmpty()
+    @Transform(({ value }) => JSON.parse(value))
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => Variants)
