@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { LoginDto, SignUpDto } from './dto';
+import { ForgotPasswordDto, LoginDto, ResetPasswordDto, SignUpDto } from './dto';
 import { User, UserDocument } from './schema';
 import { Tokens } from './types';
 
@@ -130,5 +130,58 @@ export class AuthService {
             access_token: at,
             refresh_token: rt,
         };
+    }
+
+    async forgotPassword(dto: ForgotPasswordDto): Promise<string> {
+        const user = await this.userModel.findOne({ email: dto.email });
+
+        if (!user) {
+            throw new ForbiddenException('user not found');
+        }
+
+        const secret = this.config.get('FORGOT_PASSWORD_SECRET_KEY') + user.password;
+
+        const token = await this.jwtService.signAsync(
+            {
+                userId: user._id.toString(),
+                email: user.email,
+            },
+            {
+                secret,
+                expiresIn: 60 * 15, //15 min
+            }
+        );
+
+        const link = `${this.config.get(
+            'FRONTEND_URL'
+        )}/reset-password/${user._id.toString()}/${token}`;
+
+        console.log({ link });
+
+        return 'reset password link sent to user email';
+    }
+
+    async resetPassword(dto: ResetPasswordDto): Promise<string> {
+        const user = await this.userModel.findById(dto.userId);
+
+        if (!user) {
+            throw new ForbiddenException('user not found');
+        }
+
+        const secret = this.config.get('FORGOT_PASSWORD_SECRET_KEY') + user.password;
+
+        const payload = await this.jwtService.verifyAsync(dto.token, { secret });
+
+        const { userId: id, email } = payload as { userId: string; email: string };
+
+        if (id !== dto.userId || email !== user.email) {
+            throw new ForbiddenException('invalid token');
+        }
+
+        user.password = dto.newPassword;
+
+        await user.save();
+
+        return 'password updated';
     }
 }

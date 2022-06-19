@@ -12,7 +12,7 @@ import {
 import { GetCurrentUser, Public } from '../common/decorators';
 import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
-import { LoginDto, SignUpDto } from './dto';
+import { ForgotPasswordDto, LoginDto, ResetPasswordDto, SignUpDto } from './dto';
 import { User } from './schema';
 import { Tokens } from './types';
 
@@ -55,5 +55,21 @@ export class AuthController {
         @GetCurrentUser('refreshToken') refreshToken: string
     ): Promise<Tokens> {
         return this.authService.refreshTokens(userId, refreshToken);
+    }
+
+    // forgot password
+    @Public()
+    @Post('forget-password')
+    @HttpCode(HttpStatus.OK)
+    forgetPassword(@Body() dto: ForgotPasswordDto): Promise<string> {
+        return this.authService.forgotPassword(dto);
+    }
+
+    // reset password
+    @Public()
+    @Post('reset-password')
+    @HttpCode(HttpStatus.OK)
+    resetPassword(@Body() dto: ResetPasswordDto): Promise<string> {
+        return this.authService.resetPassword(dto);
     }
 }
