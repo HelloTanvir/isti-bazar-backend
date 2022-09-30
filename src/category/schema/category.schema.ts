@@ -1,21 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 import { Document, SchemaTypes } from 'mongoose';
 
 export type CategoryDocument = Category & Document;
 
 @Schema({ timestamps: true })
 export class Category {
-    @Prop({ type: SchemaTypes.String, required: [true, 'Category name is required'], unique: true })
+    @ApiProperty()
+    @Prop({ required: [true, 'Category name is required'], unique: true })
     name: string;
 
+    @ApiProperty()
     @Prop({
         type: [SchemaTypes.String],
         default: [],
     })
     subCategories: string[];
 
+    @ApiProperty()
     @Prop({
-        type: SchemaTypes.Number,
         min: [0, 'Stock must be greater than 0'],
         default: 0,
     })

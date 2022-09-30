@@ -1,63 +1,52 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes } from 'mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { Document } from 'mongoose';
+import { ProductInfo, ProductInfoSchema } from './product-info.schema';
 
 export type OrderDocument = Order & Document;
 
-class ProductInfo {
-    @Prop({ type: SchemaTypes.String, required: [true, 'Product id is required'] })
-    id: string;
-
-    @Prop({
-        type: SchemaTypes.Number,
-        required: [true, 'Product quantity is required'],
-        min: [1, 'Product quantity must be greater than 0'],
-    })
-    quantity: string;
-
-    // optional variant details
-    @Prop({
-        type: SchemaTypes.String,
-    })
-    size: string;
-
-    @Prop({
-        type: SchemaTypes.String,
-    })
-    color: string;
-}
-
 @Schema({ timestamps: true })
 export class Order {
-    // customer details
-    @Prop({ type: SchemaTypes.String, required: [true, 'Customer name is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Customer name is required'] })
     name: string;
 
-    @Prop({ type: SchemaTypes.String, required: [true, 'Customer phone number is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Customer phone number is required'] })
     number: string;
 
-    // product details
-    @Prop({ type: [typeof ProductInfo], required: [true, 'Product details are required'] })
+    @ApiProperty({ type: [ProductInfo] })
+    @Prop({
+        type: [ProductInfoSchema],
+        default: [],
+    })
     products: ProductInfo[];
 
     // delivery details
-    @Prop({ type: SchemaTypes.String, required: [true, 'Customer address is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Customer address is required'] })
     address: string;
 
-    @Prop({ type: SchemaTypes.String, required: [true, 'Customer city is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Customer city is required'] })
     city: string;
 
-    @Prop({ type: SchemaTypes.String, required: [true, 'Customer zone is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Customer zone is required'] })
     zone: string;
 
-    @Prop({ type: SchemaTypes.String, required: [true, 'Delivery is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Delivery time is required'] })
     deliveryTime: string;
 
     // status
-    @Prop({ type: SchemaTypes.String, default: 'pending' })
+    @ApiProperty()
+    @Prop({ default: 'pending' })
     status: string;
 
     // cart total
-    @Prop({ type: SchemaTypes.Number, required: [true, 'Cart total is required'] })
+    @ApiProperty()
+    @Prop({ required: [true, 'Cart total is required'] })
     total: number;
 }
 
