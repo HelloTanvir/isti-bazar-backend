@@ -28,6 +28,11 @@ export class User {
     @ApiProperty()
     @Prop({ default: null })
     refreshToken: string | null;
+
+    // is the user admin?
+    @ApiProperty()
+    @Prop({ default: false })
+    isAdmin: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

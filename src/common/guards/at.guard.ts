@@ -15,7 +15,13 @@ export class AtGuard extends AuthGuard('jwt') {
             context.getClass(),
         ]);
 
+        const isAdmin = this.reflector.getAllAndOverride('isAdmin', [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+
         if (isPublic) return true;
+        if (isAdmin) return true;
 
         return super.canActivate(context);
     }
