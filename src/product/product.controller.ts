@@ -7,6 +7,7 @@ import {
     HttpStatus,
     Param,
     Post,
+    UploadedFile,
     UploadedFiles,
     UseFilters,
     // eslint-disable-next-line prettier/prettier
@@ -37,12 +38,9 @@ export class ProductController {
     @ApiCreatedResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('images', 5, imageUploadOptions))
-    create(
-        @Body() dto: ProductDto,
-        @UploadedFiles() images: Array<Express.Multer.File>
-    ): Promise<Product> {
-        return this.productService.create(dto, images);
+    @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
+    create(@Body() dto: ProductDto, @UploadedFile() image: Express.Multer.File): Promise<Product> {
+        return this.productService.create(dto, image);
     }
 
     @Get()
@@ -67,13 +65,13 @@ export class ProductController {
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('images', 5, imageUploadOptions))
+    @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
     update(
         @Param('id') id: string | number,
         @Body() dto: ProductUpdateDto,
-        @UploadedFiles() images: Array<Express.Multer.File>
+        @UploadedFiles() image: Express.Multer.File
     ): Promise<Product> {
-        return this.productService.update(id, dto, images);
+        return this.productService.update(id, dto, image);
     }
 
     @Delete('/:id')
@@ -84,4 +82,6 @@ export class ProductController {
     delete(@Param('id') id: string | number): Promise<Product> {
         return this.productService.delete(id);
     }
+
+    // TODO: create a route to add product variant with image
 }

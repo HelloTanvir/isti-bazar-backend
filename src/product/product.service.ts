@@ -14,11 +14,7 @@ export class ProductService {
         private readonly storageService: StorageService
     ) {}
 
-    async create(dto: ProductDto, images: Express.Multer.File[]): Promise<Product> {
-        if (!images.length) {
-            throw new ForbiddenException('Product images are required');
-        }
-
+    async create(dto: ProductDto, image: Express.Multer.File): Promise<Product> {
         const product = await this.productModel.findOne({ code: dto.code });
         if (product) {
             throw new ForbiddenException('product code already exists');
@@ -29,27 +25,22 @@ export class ProductService {
             throw new ForbiddenException('category does not exist');
         }
 
-        // increase category stock by product quantity
-        category.stock += dto.stock;
-
-        // upload images
-        const imagePaths: string[] = [];
-        const keys: string[] = [];
-
-        for (const image of images) {
-            const { location, key } = await this.storageService.uploadFile(image);
-            imagePaths.push(location);
-            keys.push(key);
+        if (!image) {
+            throw new ForbiddenException('Product thumbnail image is required');
         }
+
+        // upload image
+        const { location, key } = await this.storageService.uploadFile(image);
+
+        // TODO: calculate product stock and update category stock
 
         const newProduct = new this.productModel({
             ...dto,
-            images: imagePaths,
-            keys,
+            thumbImage: location,
+            thumbKey: key,
         });
 
         await newProduct.save();
-        await category.save();
 
         return newProduct;
     }
@@ -65,7 +56,7 @@ export class ProductService {
     async update(
         id: string | number,
         dto: ProductUpdateDto,
-        images: Express.Multer.File[]
+        image: Express.Multer.File
     ): Promise<Product> {
         const product = await this.productModel.findById(id);
         if (!product) {
@@ -78,31 +69,18 @@ export class ProductService {
                 throw new ForbiddenException('category does not exist');
             }
 
-            // update category stock by product quantity
-            category.stock -= product.stock;
-            category.stock += dto.stock;
-
-            await category.save();
+            // TODO: calculate product stock and update category stock
         }
 
-        if (images.length) {
-            // delete old files first
-            for (const key of product.keys) {
-                await this.storageService.deleteFile(key);
-            }
+        if (image) {
+            // delete old image first
+            await this.storageService.deleteFile(product.thumbImageKey);
 
-            const imagePaths: string[] = [];
-            const keys: string[] = [];
+            // upload new image
+            const { location, key } = await this.storageService.uploadFile(image);
 
-            // override new image paths
-            for (const image of images) {
-                const { location, key } = await this.storageService.uploadFile(image);
-                imagePaths.push(location);
-                keys.push(key);
-            }
-
-            (dto as any).images = imagePaths;
-            (dto as any).keys = keys;
+            (dto as any).thumbImage = location;
+            (dto as any).thumbImageKey = key;
         }
 
         return await this.productModel.findByIdAndUpdate(id, dto, { new: true });
@@ -114,10 +92,8 @@ export class ProductService {
             throw new ForbiddenException('product does not exist');
         }
 
-        // delete images
-        for (const key of product.keys) {
-            await this.storageService.deleteFile(key);
-        }
+        // delete product thumbnail image
+        await this.storageService.deleteFile(product.thumbImageKey);
 
         // delete product
         await product.remove();
