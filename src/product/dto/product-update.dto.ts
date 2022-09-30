@@ -61,12 +61,6 @@ export class ProductUpdateDto {
     @IsNumberString()
     sellingPrice: number;
 
-    @ApiProperty({ example: '25', description: 'Stock of the product' })
-    @IsOptional()
-    @IsNotEmpty()
-    @IsNumberString()
-    stock: number;
-
     @ApiProperty({ example: 'Product of the year', description: 'Description of the product' })
     @IsOptional()
     @IsNotEmpty()

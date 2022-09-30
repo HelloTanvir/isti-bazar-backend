@@ -1,9 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsNumberString, IsString, ValidateNested } from 'class-validator';
+import {
+    IsArray,
+    IsNotEmpty,
+    IsNumberString,
+    IsOptional,
+    IsString,
+    // eslint-disable-next-line prettier/prettier
+    ValidateNested
+} from 'class-validator';
 
 class Variant {
     @ApiProperty({ example: 'Small', description: 'Size of the variant' })
+    @IsOptional()
     @IsNotEmpty()
     @IsString()
     size: string;
@@ -44,11 +53,6 @@ export class ProductDto {
     @IsNotEmpty()
     @IsNumberString()
     sellingPrice: number;
-
-    @ApiProperty({ example: '25', description: 'Stock of the product' })
-    @IsNotEmpty()
-    @IsNumberString()
-    stock: number;
 
     @ApiProperty({ example: 'Product of the year', description: 'Description of the product' })
     @IsNotEmpty()
