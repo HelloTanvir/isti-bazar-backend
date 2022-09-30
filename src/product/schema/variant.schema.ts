@@ -21,6 +21,14 @@ export class Variant {
         min: [0, 'Variant stock must be greater than 0'],
     })
     stock: number;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product image keys are required'] })
+    image: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product image keys are required'] })
+    key: string;
 }
 
 export const VariantSchema = SchemaFactory.createForClass(Variant);
