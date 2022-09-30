@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { PassportStrategy } from '@nestjs/passport';
@@ -25,6 +25,11 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
             throw new UnauthorizedException();
         }
 
-        return payload;
+        SetMetadata('isAdmin', user.isAdmin);
+
+        return {
+            ...payload,
+            isAdmin: user.isAdmin,
+        };
     }
 }
