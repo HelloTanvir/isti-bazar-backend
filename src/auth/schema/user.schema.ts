@@ -7,7 +7,7 @@ export type UserDocument = User & Document;
 @Schema({ timestamps: true })
 export class User {
     @Prop({ type: SchemaTypes.String, required: [true, 'User name is required'] })
-    fullName: string;
+    name: string;
 
     @Prop({
         type: SchemaTypes.String,
