@@ -22,6 +22,7 @@ import {
     // eslint-disable-next-line prettier/prettier
     ApiTags
 } from '@nestjs/swagger';
+import { GetCurrentUser } from '../common/decorators';
 import { ProductDto, ProductUpdateDto } from './dto';
 import { ProductService } from './product.service';
 import { Product } from './schema';
@@ -39,8 +40,12 @@ export class ProductController {
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
     @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
-    create(@Body() dto: ProductDto, @UploadedFile() image: Express.Multer.File): Promise<Product> {
-        return this.productService.create(dto, image);
+    create(
+        @GetCurrentUser('userId') userId: string,
+        @Body() dto: ProductDto,
+        @UploadedFile() image: Express.Multer.File
+    ): Promise<Product> {
+        return this.productService.create(userId, dto, image);
     }
 
     @Get()

@@ -12,6 +12,10 @@ export class Product {
     name: string;
 
     @ApiProperty()
+    @Prop({ required: [true, 'Product merchant id is required'] })
+    merchantId: string;
+
+    @ApiProperty()
     @Prop({ required: [true, 'Product images are required'] })
     thumbImage: string;
 

@@ -14,7 +14,7 @@ export class ProductService {
         private readonly storageService: StorageService
     ) {}
 
-    async create(dto: ProductDto, image: Express.Multer.File): Promise<Product> {
+    async create(userId: string, dto: ProductDto, image: Express.Multer.File): Promise<Product> {
         const product = await this.productModel.findOne({ code: dto.code });
         if (product) {
             throw new ForbiddenException('product code already exists');
@@ -36,6 +36,7 @@ export class ProductService {
 
         const newProduct = new this.productModel({
             ...dto,
+            merchantId: userId,
             thumbImage: location,
             thumbKey: key,
         });
