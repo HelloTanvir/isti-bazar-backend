@@ -52,16 +52,19 @@ export class ProductController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get all products' })
     @ApiOkResponse({ type: [Product], isArray: true })
-    findAll(): Promise<Product[]> {
-        return this.productService.findAll();
+    findAll(@GetCurrentUser('userId') userId: string): Promise<Product[]> {
+        return this.productService.findAll(userId);
     }
 
     @Get('/:id')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get a single product' })
     @ApiOkResponse({ type: Product })
-    findOne(@Param('id') id: string | number): Promise<Product> {
-        return this.productService.findOne(id);
+    findOne(
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string
+    ): Promise<Product> {
+        return this.productService.findOne(userId, productId);
     }
 
     @Post('/:id')
@@ -72,11 +75,12 @@ export class ProductController {
     @UseFilters(HttpExceptionFilter)
     @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
     update(
-        @Param('id') id: string | number,
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string,
         @Body() dto: ProductUpdateDto,
         @UploadedFiles() image: Express.Multer.File
     ): Promise<Product> {
-        return this.productService.update(id, dto, image);
+        return this.productService.update(userId, productId, dto, image);
     }
 
     @Delete('/:id')
@@ -84,8 +88,11 @@ export class ProductController {
     @ApiOperation({ summary: 'Delete a product' })
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()
-    delete(@Param('id') id: string | number): Promise<Product> {
-        return this.productService.delete(id);
+    delete(
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string
+    ): Promise<Product> {
+        return this.productService.delete(userId, productId);
     }
 
     // TODO: create a route to add product variant with image

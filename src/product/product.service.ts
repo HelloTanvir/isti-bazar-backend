@@ -46,20 +46,21 @@ export class ProductService {
         return newProduct;
     }
 
-    async findAll(): Promise<Product[]> {
-        return await this.productModel.find();
+    async findAll(userId: string): Promise<Product[]> {
+        return await this.productModel.find({ merchantId: userId });
     }
 
-    async findOne(id: string | number): Promise<Product> {
-        return await this.productModel.findById(id);
+    async findOne(userId: string, productId: string): Promise<Product> {
+        return await this.productModel.findOne({ merchantId: userId, _id: productId });
     }
 
     async update(
-        id: string | number,
+        userId: string,
+        productId: string,
         dto: ProductUpdateDto,
         image: Express.Multer.File
     ): Promise<Product> {
-        const product = await this.productModel.findById(id);
+        const product = await this.productModel.findOne({ merchantId: userId, _id: productId });
         if (!product) {
             throw new ForbiddenException('product does not exist');
         }
@@ -84,11 +85,11 @@ export class ProductService {
             (dto as any).thumbImageKey = key;
         }
 
-        return await this.productModel.findByIdAndUpdate(id, dto, { new: true });
+        return await this.productModel.findByIdAndUpdate(productId, dto, { new: true });
     }
 
-    async delete(id: string | number): Promise<Product> {
-        const product = await this.productModel.findById(id);
+    async delete(userId: string, productId: string): Promise<Product> {
+        const product = await this.productModel.findOne({ merchantId: userId, _id: productId });
         if (!product) {
             throw new ForbiddenException('product does not exist');
         }
