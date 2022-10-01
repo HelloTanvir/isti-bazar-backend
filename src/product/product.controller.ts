@@ -23,7 +23,7 @@ import {
     ApiTags
 } from '@nestjs/swagger';
 import { GetCurrentUser } from '../common/decorators';
-import { ProductDto, ProductUpdateDto, VariantCreateDto } from './dto';
+import { ProductDto, ProductUpdateDto, VariantCreateDto, VariantUpdateDto } from './dto';
 import { ProductService } from './product.service';
 import { Product } from './schema';
 import { HttpExceptionFilter, imageUploadOptions } from './utils';
@@ -115,6 +115,24 @@ export class ProductController {
         @UploadedFiles() image: Express.Multer.File
     ): Promise<Product> {
         return this.productService.addVariant(userId, productId, dto, image);
+    }
+
+    // update a variant of a product
+    @Post('/:productId/variant/:variantId')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a product variant' })
+    @ApiOkResponse({ type: Product })
+    @ApiBearerAuth()
+    @UseFilters(HttpExceptionFilter)
+    @UseInterceptors(FilesInterceptor('variantImage', 1, imageUploadOptions))
+    updateVariant(
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string,
+        @Param('variantId') variantId: string,
+        @Body() dto: VariantUpdateDto,
+        @UploadedFiles() image: Express.Multer.File
+    ): Promise<Product> {
+        return this.productService.updateVariant(userId, productId, variantId, dto, image);
     }
 
     // TODO: create a route to update product variant with image

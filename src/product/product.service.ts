@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../category/schema';
-import { ProductDto, ProductUpdateDto, VariantCreateDto } from './dto';
+import { ProductDto, ProductUpdateDto, VariantCreateDto, VariantUpdateDto } from './dto';
 import { Product, ProductDocument } from './schema';
 import { StorageService } from './utils';
 
@@ -132,6 +132,46 @@ export class ProductService {
             variantImage: location,
             variantImageKey: key,
         });
+
+        await product.save();
+
+        return product;
+    }
+
+    async updateVariant(
+        userId: string,
+        productId: string,
+        variantId: string,
+        dto: VariantUpdateDto,
+        image: Express.Multer.File
+    ): Promise<Product> {
+        const product = await this.productModel.findOne({ merchantId: userId, _id: productId });
+        if (!product) {
+            throw new ForbiddenException('product does not exist');
+        }
+
+        const variantIndex = product.variants.findIndex(
+            (v) => (v as any)._id.toString() == variantId
+        );
+        if (variantIndex < 0) {
+            throw new ForbiddenException('variant does not exist');
+        }
+
+        let variant = product.variants[variantIndex];
+
+        if (image) {
+            // delete old image first
+            await this.storageService.deleteFile(variant.variantImageKey);
+
+            // upload new image
+            const { location, key } = await this.storageService.uploadFile(image);
+
+            (dto as any).variantImage = location;
+            (dto as any).variantImageKey = key;
+        }
+
+        variant = { ...variant, ...dto };
+        product.variants[variantIndex] = variant;
 
         await product.save();
 
