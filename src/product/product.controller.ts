@@ -56,7 +56,7 @@ export class ProductController {
         return this.productService.findAll(userId);
     }
 
-    @Get('/:id')
+    @Get('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get a single product' })
     @ApiOkResponse({ type: Product })
@@ -67,7 +67,7 @@ export class ProductController {
         return this.productService.findOne(userId, productId);
     }
 
-    @Post('/:id')
+    @Post('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Update a product' })
     @ApiOkResponse({ type: Product })
@@ -83,7 +83,7 @@ export class ProductController {
         return this.productService.update(userId, productId, dto, image);
     }
 
-    @Delete('/:id')
+    @Delete('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Delete a product' })
     @ApiOkResponse({ type: Product })
@@ -96,4 +96,5 @@ export class ProductController {
     }
 
     // TODO: create a route to add product variant with image
+    // TODO: add admin access to product
 }
