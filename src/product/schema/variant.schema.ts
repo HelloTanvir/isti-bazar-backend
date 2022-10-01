@@ -4,15 +4,15 @@ import { ApiProperty } from '@nestjs/swagger';
 @Schema()
 export class Variant {
     @ApiProperty()
-    @Prop({
-        required: [true, 'Variant size is required'],
-    })
+    @Prop({ required: [true, 'Variant code is required'], unique: true })
+    variantCode: string;
+
+    @ApiProperty()
+    @Prop()
     size: string;
 
     @ApiProperty()
-    @Prop({
-        required: [true, 'Variant color is required'],
-    })
+    @Prop({ required: [true, 'Variant color is required'] })
     color: string;
 
     @ApiProperty()
@@ -21,6 +21,14 @@ export class Variant {
         min: [0, 'Variant stock must be greater than 0'],
     })
     stock: number;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product image keys are required'] })
+    variantImage: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product image keys are required'] })
+    variantImageKey: string;
 }
 
 export const VariantSchema = SchemaFactory.createForClass(Variant);

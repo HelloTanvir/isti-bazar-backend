@@ -15,7 +15,7 @@ export class OrderService {
 
     async create(dto: OrderDto): Promise<Order> {
         dto.products.forEach(async (p) => {
-            const product = await this.productModel.findById(p.id);
+            const product = await this.productModel.findById(p.productId);
             if (!product) {
                 throw new ForbiddenException('product does not exist');
             }

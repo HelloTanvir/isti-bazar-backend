@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, SchemaTypes } from 'mongoose';
+import { Document } from 'mongoose';
 import { Variant, VariantSchema } from './variant.schema';
 
 export type ProductDocument = Product & Document;
@@ -11,13 +11,17 @@ export class Product {
     @Prop({ required: [true, 'Product name is required'] })
     name: string;
 
-    @ApiProperty({ type: [String], isArray: true })
-    @Prop({ type: [SchemaTypes.String], required: [true, 'Product images are required'] })
-    images: string[];
+    @ApiProperty()
+    @Prop({ required: [true, 'Product merchant id is required'] })
+    merchantId: string;
 
-    @ApiProperty({ type: [String], isArray: true })
-    @Prop({ type: [SchemaTypes.String], required: [true, 'Product image keys are required'] })
-    keys: string[];
+    @ApiProperty()
+    @Prop({ required: [true, 'Product images are required'] })
+    thumbImage: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product image keys are required'] })
+    thumbImageKey: string;
 
     @ApiProperty()
     @Prop({ required: [true, 'Product code is required'], unique: true })
