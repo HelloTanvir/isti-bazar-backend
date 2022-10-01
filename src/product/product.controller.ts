@@ -135,7 +135,19 @@ export class ProductController {
         return this.productService.updateVariant(userId, productId, variantId, dto, image);
     }
 
-    // TODO: create a route to update product variant with image
-    // TODO: create a route to delete product variant with image deletion
+    // delete a variant of a product
+    @Delete('/:productId/variant/:variantId')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Delete a product variant' })
+    @ApiOkResponse({ type: Product })
+    @ApiBearerAuth()
+    deleteVariant(
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string,
+        @Param('variantId') variantId: string
+    ): Promise<Product> {
+        return this.productService.deleteVariant(userId, productId, variantId);
+    }
+
     // TODO: add admin access to product
 }

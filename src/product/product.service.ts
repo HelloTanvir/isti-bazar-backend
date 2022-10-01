@@ -177,4 +177,28 @@ export class ProductService {
 
         return product;
     }
+
+    async deleteVariant(userId: string, productId: string, variantId: string): Promise<Product> {
+        const product = await this.productModel.findOne({ merchantId: userId, _id: productId });
+        if (!product) {
+            throw new ForbiddenException('product does not exist');
+        }
+
+        const variantIndex = product.variants.findIndex(
+            (v) => (v as any)._id.toString() == variantId
+        );
+        if (variantIndex < 0) {
+            throw new ForbiddenException('variant does not exist');
+        }
+
+        // delete variant image
+        await this.storageService.deleteFile(product.variants[variantIndex].variantImageKey);
+
+        // delete variant
+        product.variants.splice(variantIndex, 1);
+
+        await product.save();
+
+        return product;
+    }
 }
