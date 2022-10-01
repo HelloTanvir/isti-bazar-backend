@@ -148,6 +148,4 @@ export class ProductController {
     ): Promise<Product> {
         return this.productService.deleteVariant(userId, productId, variantId);
     }
-
-    // TODO: add admin access to product
 }
