@@ -7,7 +7,7 @@ export class VariantCreateDto {
     @IsString()
     variantCode: string;
 
-    @ApiProperty({ example: 'Small', description: 'Size of the variant' })
+    @ApiProperty({ example: 'Small', description: 'Size of the variant', required: false })
     @IsOptional()
     @IsNotEmpty()
     @IsString()
