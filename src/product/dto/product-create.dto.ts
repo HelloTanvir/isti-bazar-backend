@@ -31,4 +31,11 @@ export class ProductDto {
     @IsNotEmpty()
     @IsString()
     description: string;
+
+    @ApiProperty({
+        description: 'Thumbnail image of the product',
+        type: 'string',
+        format: 'binary',
+    })
+    thumbImage: string;
 }

@@ -16,6 +16,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import {
     ApiBearerAuth,
+    ApiConsumes,
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
@@ -36,6 +37,7 @@ export class ProductController {
     // create a product with thumb image, no variant is added initially
     @Post()
     @HttpCode(HttpStatus.CREATED)
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Create a product' })
     @ApiCreatedResponse({ type: Product })
     @ApiBearerAuth()
@@ -73,6 +75,7 @@ export class ProductController {
     // update a product
     @Post('/:productId')
     @HttpCode(HttpStatus.OK)
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Update a product' })
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()
@@ -103,6 +106,7 @@ export class ProductController {
     // add a variant to a product with variant image
     @Post('/:productId/variant')
     @HttpCode(HttpStatus.CREATED)
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Add a product variant' })
     @ApiCreatedResponse({ type: Product })
     @ApiBearerAuth()
@@ -120,6 +124,7 @@ export class ProductController {
     // update a variant of a product
     @Post('/:productId/variant/:variantId')
     @HttpCode(HttpStatus.OK)
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Update a product variant' })
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()

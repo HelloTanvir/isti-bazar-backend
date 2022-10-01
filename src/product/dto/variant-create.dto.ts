@@ -22,4 +22,11 @@ export class VariantCreateDto {
     @IsNotEmpty()
     @IsNumberString({ message: 'Variant stock must be a number' })
     stock: number;
+
+    @ApiProperty({
+        description: 'Image of the product variant',
+        type: 'string',
+        format: 'binary',
+    })
+    variantImage: string;
 }
