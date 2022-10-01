@@ -24,11 +24,11 @@ export class Variant {
 
     @ApiProperty()
     @Prop({ required: [true, 'Product image keys are required'] })
-    image: string;
+    variantImage: string;
 
     @ApiProperty()
     @Prop({ required: [true, 'Product image keys are required'] })
-    key: string;
+    variantImageKey: string;
 }
 
 export const VariantSchema = SchemaFactory.createForClass(Variant);
