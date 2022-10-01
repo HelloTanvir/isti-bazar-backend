@@ -32,8 +32,6 @@ export class ProductService {
         // upload image
         const { location, key } = await this.storageService.uploadFile(image);
 
-        // TODO: calculate product stock and update category stock
-
         const newProduct = new this.productModel({
             ...dto,
             merchantId: userId,
@@ -70,8 +68,6 @@ export class ProductService {
             if (!category) {
                 throw new ForbiddenException('category does not exist');
             }
-
-            // TODO: calculate product stock and update category stock
         }
 
         if (image) {
@@ -96,6 +92,12 @@ export class ProductService {
 
         // delete product thumbnail image
         await this.storageService.deleteFile(product.thumbImageKey);
+
+        // reduce stock on category by the total shock of this product variants
+        const category = await this.categoryModel.findOne({ name: product.category });
+        const productStock = product.variants.reduce((prev, curr) => prev + curr.stock, 0);
+        category.stock -= productStock;
+        await category.save();
 
         // delete product
         await product.remove();
@@ -135,6 +137,11 @@ export class ProductService {
 
         await product.save();
 
+        // increase stock on category by this variant's stock
+        const category = await this.categoryModel.findOne({ name: product.category });
+        category.stock += dto.stock;
+        await category.save();
+
         return product;
     }
 
@@ -170,6 +177,12 @@ export class ProductService {
             (dto as any).variantImageKey = key;
         }
 
+        // update stock on category
+        const category = await this.categoryModel.findOne({ name: product.category });
+        category.stock -= variant.stock;
+        category.stock += dto.stock;
+        await category.save();
+
         variant = { ...variant, ...dto };
         product.variants[variantIndex] = variant;
 
@@ -193,6 +206,11 @@ export class ProductService {
 
         // delete variant image
         await this.storageService.deleteFile(product.variants[variantIndex].variantImageKey);
+
+        // reduce stock on category by this variant's stock
+        const category = await this.categoryModel.findOne({ name: product.category });
+        category.stock -= product.variants[variantIndex].stock;
+        await category.save();
 
         // delete variant
         product.variants.splice(variantIndex, 1);
