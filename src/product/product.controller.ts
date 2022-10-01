@@ -101,7 +101,7 @@ export class ProductController {
     }
 
     // add a variant to a product with variant image
-    @Post('/:productId/:variantId')
+    @Post('/:productId/variant')
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Add a product variant' })
     @ApiCreatedResponse({ type: Product })
