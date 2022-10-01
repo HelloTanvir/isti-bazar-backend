@@ -23,7 +23,7 @@ import {
     ApiTags
 } from '@nestjs/swagger';
 import { GetCurrentUser } from '../common/decorators';
-import { ProductDto, ProductUpdateDto } from './dto';
+import { ProductDto, ProductUpdateDto, VariantCreateDto } from './dto';
 import { ProductService } from './product.service';
 import { Product } from './schema';
 import { HttpExceptionFilter, imageUploadOptions } from './utils';
@@ -33,6 +33,7 @@ import { HttpExceptionFilter, imageUploadOptions } from './utils';
 export class ProductController {
     constructor(private productService: ProductService) {}
 
+    // create a product with thumb image, no variant is added initially
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Create a product' })
@@ -48,6 +49,7 @@ export class ProductController {
         return this.productService.create(userId, dto, image);
     }
 
+    // get all products added by a merchant
     @Get()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get all products' })
@@ -56,6 +58,7 @@ export class ProductController {
         return this.productService.findAll(userId);
     }
 
+    // get a product by id added by a merchant
     @Get('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get a single product' })
@@ -67,6 +70,7 @@ export class ProductController {
         return this.productService.findOne(userId, productId);
     }
 
+    // update a product
     @Post('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Update a product' })
@@ -83,6 +87,7 @@ export class ProductController {
         return this.productService.update(userId, productId, dto, image);
     }
 
+    // delete a product
     @Delete('/:productId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Delete a product' })
@@ -95,6 +100,24 @@ export class ProductController {
         return this.productService.delete(userId, productId);
     }
 
-    // TODO: create a route to add product variant with image
+    // add a variant to a product with variant image
+    @Post('/:productId/:variantId')
+    @HttpCode(HttpStatus.CREATED)
+    @ApiOperation({ summary: 'Add a product variant' })
+    @ApiCreatedResponse({ type: Product })
+    @ApiBearerAuth()
+    @UseFilters(HttpExceptionFilter)
+    @UseInterceptors(FilesInterceptor('variantImage', 1, imageUploadOptions))
+    addVariant(
+        @GetCurrentUser('userId') userId: string,
+        @Param('productId') productId: string,
+        @Body() dto: VariantCreateDto,
+        @UploadedFiles() image: Express.Multer.File
+    ): Promise<Product> {
+        return this.productService.addVariant(userId, productId, dto, image);
+    }
+
+    // TODO: create a route to update product variant with image
+    // TODO: create a route to delete product variant with image deletion
     // TODO: add admin access to product
 }

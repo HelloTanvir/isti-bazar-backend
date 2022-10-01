@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../category/schema';
-import { ProductDto, ProductUpdateDto } from './dto';
+import { ProductDto, ProductUpdateDto, VariantCreateDto } from './dto';
 import { Product, ProductDocument } from './schema';
 import { StorageService } from './utils';
 
@@ -99,6 +99,41 @@ export class ProductService {
 
         // delete product
         await product.remove();
+
+        return product;
+    }
+
+    async addVariant(
+        userId: string,
+        productId: string,
+        dto: VariantCreateDto,
+        image: Express.Multer.File
+    ): Promise<Product> {
+        const product = await this.productModel.findOne({ merchantId: userId, _id: productId });
+        if (!product) {
+            throw new ForbiddenException('product does not exist');
+        }
+
+        for (const variant of product.variants) {
+            if (variant.variantCode === dto.variantCode) {
+                throw new ForbiddenException('variant code already exists');
+            }
+        }
+
+        if (!image) {
+            throw new ForbiddenException('Product image is required');
+        }
+
+        // upload image
+        const { location, key } = await this.storageService.uploadFile(image);
+
+        product.variants.push({
+            ...dto,
+            variantImage: location,
+            variantImageKey: key,
+        });
+
+        await product.save();
 
         return product;
     }
