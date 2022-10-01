@@ -2,6 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
 
 export class VariantCreateDto {
+    @ApiProperty({ example: 'ABC-123', description: 'Code of the variant' })
+    @IsNotEmpty()
+    @IsString()
+    variantCode: string;
+
     @ApiProperty({ example: 'Small', description: 'Size of the variant' })
     @IsOptional()
     @IsNotEmpty()

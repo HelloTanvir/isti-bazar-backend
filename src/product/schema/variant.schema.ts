@@ -4,15 +4,15 @@ import { ApiProperty } from '@nestjs/swagger';
 @Schema()
 export class Variant {
     @ApiProperty()
-    @Prop({
-        required: [true, 'Variant size is required'],
-    })
+    @Prop({ required: [true, 'Variant code is required'] })
+    variantCode: string;
+
+    @ApiProperty()
+    @Prop()
     size: string;
 
     @ApiProperty()
-    @Prop({
-        required: [true, 'Variant color is required'],
-    })
+    @Prop({ required: [true, 'Variant color is required'] })
     color: string;
 
     @ApiProperty()
