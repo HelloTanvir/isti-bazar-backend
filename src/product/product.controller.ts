@@ -8,7 +8,6 @@ import {
     Param,
     Post,
     UploadedFile,
-    UploadedFiles,
     UseFilters,
     // eslint-disable-next-line prettier/prettier
     UseInterceptors
@@ -85,7 +84,7 @@ export class ProductController {
         @GetCurrentUser('userId') userId: string,
         @Param('productId') productId: string,
         @Body() dto: ProductUpdateDto,
-        @UploadedFiles() image: Express.Multer.File
+        @UploadedFile() image: Express.Multer.File
     ): Promise<Product> {
         return this.productService.update(userId, productId, dto, image);
     }
@@ -116,7 +115,7 @@ export class ProductController {
         @GetCurrentUser('userId') userId: string,
         @Param('productId') productId: string,
         @Body() dto: VariantCreateDto,
-        @UploadedFiles() image: Express.Multer.File
+        @UploadedFile() image: Express.Multer.File
     ): Promise<Product> {
         return this.productService.addVariant(userId, productId, dto, image);
     }
@@ -135,7 +134,7 @@ export class ProductController {
         @Param('productId') productId: string,
         @Param('variantId') variantId: string,
         @Body() dto: VariantUpdateDto,
-        @UploadedFiles() image: Express.Multer.File
+        @UploadedFile() image: Express.Multer.File
     ): Promise<Product> {
         return this.productService.updateVariant(userId, productId, variantId, dto, image);
     }
