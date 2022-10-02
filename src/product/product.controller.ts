@@ -12,7 +12,7 @@ import {
     // eslint-disable-next-line prettier/prettier
     UseInterceptors
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
     ApiBearerAuth,
     ApiConsumes,
@@ -41,7 +41,7 @@ export class ProductController {
     @ApiCreatedResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
+    @UseInterceptors(FileInterceptor('thumbImage', imageUploadOptions))
     create(
         @GetCurrentUser('userId') userId: string,
         @Body() dto: ProductDto,
@@ -79,7 +79,7 @@ export class ProductController {
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('thumbImage', 1, imageUploadOptions))
+    @UseInterceptors(FileInterceptor('thumbImage', imageUploadOptions))
     update(
         @GetCurrentUser('userId') userId: string,
         @Param('productId') productId: string,
@@ -110,7 +110,7 @@ export class ProductController {
     @ApiCreatedResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('variantImage', 1, imageUploadOptions))
+    @UseInterceptors(FileInterceptor('variantImage', imageUploadOptions))
     addVariant(
         @GetCurrentUser('userId') userId: string,
         @Param('productId') productId: string,
@@ -128,7 +128,7 @@ export class ProductController {
     @ApiOkResponse({ type: Product })
     @ApiBearerAuth()
     @UseFilters(HttpExceptionFilter)
-    @UseInterceptors(FilesInterceptor('variantImage', 1, imageUploadOptions))
+    @UseInterceptors(FileInterceptor('variantImage', imageUploadOptions))
     updateVariant(
         @GetCurrentUser('userId') userId: string,
         @Param('productId') productId: string,
