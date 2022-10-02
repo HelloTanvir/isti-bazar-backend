@@ -7,9 +7,9 @@ export class Variant {
     @Prop({ required: [true, 'Variant code is required'], unique: true })
     variantCode: string;
 
-    @ApiProperty()
-    @Prop()
-    size: string;
+    @ApiProperty({ type: [String], isArray: true })
+    @Prop({ type: [String], default: [] })
+    sizes: string[];
 
     @ApiProperty()
     @Prop({ required: [true, 'Variant color is required'] })
