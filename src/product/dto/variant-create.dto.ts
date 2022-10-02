@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
 
 export class VariantCreateDto {
     @ApiProperty({ example: 'ABC-123', description: 'Code of the variant' })
@@ -10,8 +10,8 @@ export class VariantCreateDto {
     @ApiProperty({ example: 'Small', description: 'Size of the variant', required: false })
     @IsOptional()
     @IsNotEmpty()
-    @IsString()
-    size: string;
+    @IsArray()
+    sizes: string[];
 
     @ApiProperty({ example: 'Black', description: 'Color of the variant' })
     @IsNotEmpty()
