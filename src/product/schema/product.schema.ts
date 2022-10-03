@@ -16,11 +16,11 @@ export class Product {
     merchantId: string;
 
     @ApiProperty()
-    @Prop({ required: [true, 'Product images are required'] })
+    @Prop({ required: [true, 'Product thumb image is required'] })
     thumbImage: string;
 
     @ApiProperty()
-    @Prop({ required: [true, 'Product image keys are required'] })
+    @Prop({ required: [true, 'Product thumb image key is required'] })
     thumbImageKey: string;
 
     @ApiProperty()
@@ -46,10 +46,7 @@ export class Product {
     sellingPrice: number;
 
     @ApiProperty()
-    @Prop({
-        required: [true, 'Product stock is required'],
-        min: [0, 'Product stock must be greater than 0'],
-    })
+    @Prop({ required: [true, 'Product description is required'] })
     stock: number;
 
     @ApiProperty()
