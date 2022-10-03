@@ -46,7 +46,7 @@ export class Product {
     sellingPrice: number;
 
     @ApiProperty()
-    @Prop({ required: [true, 'Product description is required'] })
+    @Prop({ default: 0 })
     stock: number;
 
     @ApiProperty()
