@@ -36,7 +36,7 @@ export class ProductService {
             ...dto,
             merchantId: userId,
             thumbImage: location,
-            thumbKey: key,
+            thumbImageKey: key,
         });
 
         await newProduct.save();
