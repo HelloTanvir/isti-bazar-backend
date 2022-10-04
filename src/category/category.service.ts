@@ -10,37 +10,40 @@ export class CategoryService {
         @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>
     ) {}
 
-    async create(dto: CategoryDto): Promise<Category> {
-        const category = await this.categoryModel.findOne({ name: dto.name });
+    async create(userId: string, dto: CategoryDto): Promise<Category> {
+        const category = await this.categoryModel.findOne({ merchantId: userId, name: dto.name });
         if (category) {
             throw new ForbiddenException('category already exists');
         }
 
-        const newCategory = new this.categoryModel(dto);
+        const newCategory = new this.categoryModel({
+            ...dto,
+            merchantId: userId,
+        });
         await newCategory.save();
 
         return newCategory;
     }
 
-    async findAll(): Promise<Category[]> {
-        return await this.categoryModel.find();
+    async findAll(userId: string): Promise<Category[]> {
+        return await this.categoryModel.find({ merchantId: userId });
     }
 
-    async findOne(id: string | number): Promise<Category> {
-        return await this.categoryModel.findById(id);
+    async findOne(userId: string, categoryId: string): Promise<Category> {
+        return await this.categoryModel.findOne({ merchantId: userId, _id: categoryId });
     }
 
-    async update(id: string | number, dto: CategoryUpdateDto): Promise<Category> {
-        const category = await this.categoryModel.findById(id);
+    async update(userId: string, categoryId: string, dto: CategoryUpdateDto): Promise<Category> {
+        const category = await this.categoryModel.findOne({ merchantId: userId, _id: categoryId });
         if (!category) {
             throw new ForbiddenException('category does not exist');
         }
 
-        return await this.categoryModel.findByIdAndUpdate(id, dto, { new: true });
+        return await this.categoryModel.findByIdAndUpdate(categoryId, dto, { new: true });
     }
 
-    async delete(id: string | number): Promise<Category> {
-        const category = await this.categoryModel.findById(id);
+    async delete(userId: string, categoryId: string): Promise<Category> {
+        const category = await this.categoryModel.findOne({ merchantId: userId, _id: categoryId });
         if (!category) {
             throw new ForbiddenException('category does not exist');
         }

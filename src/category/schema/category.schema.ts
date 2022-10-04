@@ -7,8 +7,12 @@ export type CategoryDocument = Category & Document;
 @Schema({ timestamps: true })
 export class Category {
     @ApiProperty()
-    @Prop({ required: [true, 'Category name is required'], unique: true })
+    @Prop({ required: [true, 'Category name is required'] })
     name: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Product merchant id is required'] })
+    merchantId: string;
 
     @ApiProperty()
     @Prop({
