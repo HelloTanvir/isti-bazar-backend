@@ -31,34 +31,44 @@ export class CategoryController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all categories' })
     @ApiOkResponse({ type: [Category] })
-    findAll(): Promise<Category[]> {
-        return this.categoryService.findAll();
+    findAll(@GetCurrentUser('userId') userId: string): Promise<Category[]> {
+        return this.categoryService.findAll(userId);
     }
 
     @Public()
-    @Get('/:id')
+    @Get('/:categoryId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel a single category' })
     @ApiOkResponse({ type: Category })
-    findOne(@Param('id') id: string | number): Promise<Category> {
-        return this.categoryService.findOne(id);
+    findOne(
+        @GetCurrentUser('userId') userId: string,
+        @Param('categoryId') categoryId: string
+    ): Promise<Category> {
+        return this.categoryService.findOne(userId, categoryId);
     }
 
-    @Post('/:id')
+    @Post('/:categoryId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Update a category' })
     @ApiOkResponse({ type: Category })
     @ApiBearerAuth()
-    update(@Param('id') id: string | number, @Body() dto: CategoryUpdateDto): Promise<Category> {
-        return this.categoryService.update(id, dto);
+    update(
+        @GetCurrentUser('userId') userId: string,
+        @Param('categoryId') categoryId: string,
+        @Body() dto: CategoryUpdateDto
+    ): Promise<Category> {
+        return this.categoryService.update(userId, categoryId, dto);
     }
 
-    @Delete('/:id')
+    @Delete('/:categoryId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Delete a category' })
     @ApiOkResponse({ type: Category })
     @ApiBearerAuth()
-    delete(@Param('id') id: string | number): Promise<Category> {
-        return this.categoryService.delete(id);
+    delete(
+        @GetCurrentUser('userId') userId: string,
+        @Param('categoryId') categoryId: string
+    ): Promise<Category> {
+        return this.categoryService.delete(userId, categoryId);
     }
 }
