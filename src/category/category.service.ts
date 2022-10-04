@@ -10,13 +10,16 @@ export class CategoryService {
         @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>
     ) {}
 
-    async create(dto: CategoryDto): Promise<Category> {
-        const category = await this.categoryModel.findOne({ name: dto.name });
+    async create(userId: string, dto: CategoryDto): Promise<Category> {
+        const category = await this.categoryModel.findOne({ merchantId: userId, name: dto.name });
         if (category) {
             throw new ForbiddenException('category already exists');
         }
 
-        const newCategory = new this.categoryModel(dto);
+        const newCategory = new this.categoryModel({
+            ...dto,
+            merchantId: userId,
+        });
         await newCategory.save();
 
         return newCategory;

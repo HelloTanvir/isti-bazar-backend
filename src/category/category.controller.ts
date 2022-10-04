@@ -7,7 +7,7 @@ import {
     // eslint-disable-next-line prettier/prettier
     ApiTags
 } from '@nestjs/swagger';
-import { Public } from '../common/decorators';
+import { GetCurrentUser, Public } from '../common/decorators';
 import { CategoryService } from './category.service';
 import { CategoryDto, CategoryUpdateDto } from './dto';
 import { Category } from './schema';
@@ -22,8 +22,8 @@ export class CategoryController {
     @ApiOperation({ summary: 'Create a category' })
     @ApiCreatedResponse({ type: Category })
     @ApiBearerAuth()
-    create(@Body() dto: CategoryDto): Promise<Category> {
-        return this.categoryService.create(dto);
+    create(@GetCurrentUser('userId') userId: string, @Body() dto: CategoryDto): Promise<Category> {
+        return this.categoryService.create(userId, dto);
     }
 
     @Public()

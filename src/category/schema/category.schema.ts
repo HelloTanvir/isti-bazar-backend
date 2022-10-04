@@ -11,6 +11,10 @@ export class Category {
     name: string;
 
     @ApiProperty()
+    @Prop({ required: [true, 'Product merchant id is required'] })
+    merchantId: string;
+
+    @ApiProperty()
     @Prop({
         type: [SchemaTypes.String],
         default: [],
