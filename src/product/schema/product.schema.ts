@@ -24,7 +24,7 @@ export class Product {
     thumbImageKey: string;
 
     @ApiProperty()
-    @Prop({ required: [true, 'Product code is required'], unique: true })
+    @Prop({ required: [true, 'Product code is required'] })
     code: string;
 
     @ApiProperty()

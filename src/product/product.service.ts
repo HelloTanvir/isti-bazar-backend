@@ -15,8 +15,7 @@ export class ProductService {
     ) {}
 
     async create(userId: string, dto: ProductDto, image: Express.Multer.File): Promise<Product> {
-        // TODO: product code can be same for different merchant, but codes should be unique for a merchant
-        const product = await this.productModel.findOne({ code: dto.code });
+        const product = await this.productModel.findOne({ merchantId: userId, code: dto.code });
         if (product) {
             throw new ForbiddenException('product code already exists');
         }
