@@ -7,7 +7,7 @@ import {
     // eslint-disable-next-line prettier/prettier
     ApiTags
 } from '@nestjs/swagger';
-import { GetCurrentUser, Public } from '../common/decorators';
+import { GetCurrentUser } from '../common/decorators';
 import { CategoryService } from './category.service';
 import { CategoryDto, CategoryUpdateDto } from './dto';
 import { Category } from './schema';
@@ -26,7 +26,6 @@ export class CategoryController {
         return this.categoryService.create(userId, dto);
     }
 
-    @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all categories' })
@@ -35,7 +34,6 @@ export class CategoryController {
         return this.categoryService.findAll(userId);
     }
 
-    @Public()
     @Get('/:categoryId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel a single category' })
