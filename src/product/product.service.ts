@@ -20,7 +20,10 @@ export class ProductService {
             throw new ForbiddenException('product code already exists');
         }
 
-        const category = await this.categoryModel.findOne({ name: dto.category });
+        const category = await this.categoryModel.findOne({
+            merchantId: userId,
+            name: dto.category,
+        });
         if (!category) {
             throw new ForbiddenException('category does not exist');
         }
@@ -64,7 +67,10 @@ export class ProductService {
         }
 
         if (dto.category) {
-            const category = await this.categoryModel.findOne({ name: dto.category });
+            const category = await this.categoryModel.findOne({
+                merchantId: userId,
+                name: dto.category,
+            });
             if (!category) {
                 throw new ForbiddenException('category does not exist');
             }
@@ -94,7 +100,10 @@ export class ProductService {
         await this.storageService.deleteFile(product.thumbImageKey);
 
         // reduce stock on category by the total shock of this product variants
-        const category = await this.categoryModel.findOne({ name: product.category });
+        const category = await this.categoryModel.findOne({
+            merchantId: userId,
+            name: product.category,
+        });
         const productStock = product.variants.reduce((prev, curr) => prev + curr.stock, 0);
         category.stock -= productStock;
         await category.save();
@@ -138,7 +147,10 @@ export class ProductService {
         await product.save();
 
         // increase stock on category by this variant's stock
-        const category = await this.categoryModel.findOne({ name: product.category });
+        const category = await this.categoryModel.findOne({
+            merchantId: userId,
+            name: product.category,
+        });
         category.stock += dto.stock;
         await category.save();
 
@@ -178,7 +190,10 @@ export class ProductService {
         }
 
         // update stock on category
-        const category = await this.categoryModel.findOne({ name: product.category });
+        const category = await this.categoryModel.findOne({
+            merchantId: userId,
+            name: product.category,
+        });
         category.stock -= variant.stock;
         category.stock += dto.stock;
         await category.save();
@@ -208,7 +223,10 @@ export class ProductService {
         await this.storageService.deleteFile(product.variants[variantIndex].variantImageKey);
 
         // reduce stock on category by this variant's stock
-        const category = await this.categoryModel.findOne({ name: product.category });
+        const category = await this.categoryModel.findOne({
+            merchantId: userId,
+            name: product.category,
+        });
         category.stock -= product.variants[variantIndex].stock;
         await category.save();
 
