@@ -8,7 +8,13 @@ export class VariantUpdateDto {
     @IsString()
     variantCode: string;
 
-    @ApiProperty({ example: 'Small', description: 'Size of the variant', required: false })
+    @ApiProperty({
+        example: ['m', 'l', 'xl'],
+        description: 'Sizes of the variant',
+        required: false,
+        isArray: true,
+        type: 'string',
+    })
     @IsOptional()
     @IsNotEmpty()
     @IsArray()
