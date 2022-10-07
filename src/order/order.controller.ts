@@ -32,8 +32,8 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all orders' })
     @ApiOkResponse({ type: [Order] })
-    async findAll(): Promise<Order[]> {
-        return await this.orderService.findAll();
+    async findAll(@GetCurrentUser('userId') userId: string): Promise<Order[]> {
+        return await this.orderService.findAll(userId);
     }
 
     @Get('/:id')

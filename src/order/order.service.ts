@@ -44,8 +44,8 @@ export class OrderService {
         return newOrder;
     }
 
-    async findAll(): Promise<Order[]> {
-        return await this.orderModel.find();
+    async findAll(userId: string): Promise<Order[]> {
+        return await this.orderModel.find({ merchantId: userId });
     }
 
     async findOne(id: string | number): Promise<Order> {
