@@ -7,8 +7,8 @@ import {
     // eslint-disable-next-line prettier/prettier
     ApiTags
 } from '@nestjs/swagger';
-import { OrderDto } from './dto';
-import { OrderUpdateDto } from './dto/order-update.dto';
+import { GetCurrentUser } from '../common/decorators';
+import { OrderCreateDto, OrderUpdateDto } from './dto';
 import { OrderService } from './order.service';
 import { Order } from './schema';
 
@@ -21,41 +21,54 @@ export class OrderController {
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Create an order' })
     @ApiCreatedResponse({ type: Order })
-    async create(@Body() dto: OrderDto): Promise<Order> {
-        return await this.orderService.create(dto);
+    async create(
+        @GetCurrentUser('userId') userId: string,
+        @Body() dto: OrderCreateDto
+    ): Promise<Order> {
+        return await this.orderService.create(userId, dto);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all orders' })
     @ApiOkResponse({ type: [Order] })
-    async findAll(): Promise<Order[]> {
-        return await this.orderService.findAll();
+    async findAll(@GetCurrentUser('userId') userId: string): Promise<Order[]> {
+        return await this.orderService.findAll(userId);
     }
 
-    @Get('/:id')
+    @Get('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel a single order' })
     @ApiOkResponse({ type: Order })
-    async findOne(@Param('id') id: string | number): Promise<Order> {
-        return await this.orderService.findOne(id);
+    async findOne(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string
+    ): Promise<Order> {
+        return await this.orderService.findOne(userId, orderId);
     }
 
-    @Post('/:id')
+    @Post('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Update an order' })
     @ApiOkResponse({ type: Order })
     @ApiBearerAuth()
-    async update(@Param('id') id: string | number, @Body() dto: OrderUpdateDto): Promise<Order> {
-        return await this.orderService.update(id, dto);
+    async update(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string,
+        @Body() dto: OrderUpdateDto
+    ): Promise<Order> {
+        return await this.orderService.update(userId, orderId, dto);
     }
 
-    @Delete('/:id')
+    @Delete('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Delete an order' })
     @ApiOkResponse({ type: Order })
     @ApiBearerAuth()
-    async delete(@Param('id') id: string | number): Promise<Order> {
-        return await this.orderService.delete(id);
+    async delete(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string
+    ): Promise<Order> {
+        return await this.orderService.delete(userId, orderId);
     }
 }
