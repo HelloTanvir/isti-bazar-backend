@@ -52,13 +52,17 @@ export class OrderService {
         return await this.orderModel.findOne({ merchantId: userId, _id: orderId });
     }
 
-    async update(id: string | number, dto: OrderUpdateDto): Promise<Order> {
-        const order = await this.orderModel.findById(id);
+    async update(userId: string, orderId: string, dto: OrderUpdateDto): Promise<Order> {
+        const order = await this.orderModel.findOne({ merchantId: userId, _id: orderId });
         if (!order) {
             throw new ForbiddenException('order does not exist');
         }
 
-        return await this.orderModel.findByIdAndUpdate(id, dto, { new: true });
+        order.status = dto.status;
+
+        await order.save();
+
+        return order;
     }
 
     async delete(id: string | number): Promise<Order> {

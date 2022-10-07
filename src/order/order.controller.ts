@@ -47,13 +47,17 @@ export class OrderController {
         return await this.orderService.findOne(userId, orderId);
     }
 
-    @Post('/:id')
+    @Post('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Update an order' })
     @ApiOkResponse({ type: Order })
     @ApiBearerAuth()
-    async update(@Param('id') id: string | number, @Body() dto: OrderUpdateDto): Promise<Order> {
-        return await this.orderService.update(id, dto);
+    async update(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string,
+        @Body() dto: OrderUpdateDto
+    ): Promise<Order> {
+        return await this.orderService.update(userId, orderId, dto);
     }
 
     @Delete('/:id')
