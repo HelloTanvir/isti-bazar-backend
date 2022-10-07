@@ -48,8 +48,8 @@ export class OrderService {
         return await this.orderModel.find({ merchantId: userId });
     }
 
-    async findOne(id: string | number): Promise<Order> {
-        return await this.orderModel.findById(id);
+    async findOne(userId: string, orderId: string): Promise<Order> {
+        return await this.orderModel.findOne({ merchantId: userId, _id: orderId });
     }
 
     async update(id: string | number, dto: OrderUpdateDto): Promise<Order> {

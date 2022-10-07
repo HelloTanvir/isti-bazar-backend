@@ -36,12 +36,15 @@ export class OrderController {
         return await this.orderService.findAll(userId);
     }
 
-    @Get('/:id')
+    @Get('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel a single order' })
     @ApiOkResponse({ type: Order })
-    async findOne(@Param('id') id: string | number): Promise<Order> {
-        return await this.orderService.findOne(id);
+    async findOne(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string
+    ): Promise<Order> {
+        return await this.orderService.findOne(userId, orderId);
     }
 
     @Post('/:id')
