@@ -82,7 +82,7 @@ export class OrderCreateDto {
     })
     @IsNotEmpty()
     @IsString()
-    shipment: number;
+    shipmentCharge: number;
 
     @ApiProperty({ example: '5', description: 'Advanced payment for the order', required: false })
     @IsNotEmpty()
