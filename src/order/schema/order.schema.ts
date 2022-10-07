@@ -9,11 +9,43 @@ export type OrderDocument = Order & Document;
 export class Order {
     @ApiProperty()
     @Prop({ required: [true, 'Customer name is required'] })
-    name: string;
+    customerName: string;
 
     @ApiProperty()
     @Prop({ required: [true, 'Customer phone number is required'] })
-    number: string;
+    customerNumber: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Delivery city is required'] })
+    city: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Delivery zone is required'] })
+    zone: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Delivery area is required'] })
+    area: string;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Delivery address is required'] })
+    address: string;
+
+    @ApiProperty()
+    @Prop()
+    specialMessage: string;
+
+    @ApiProperty()
+    @Prop()
+    discount: number;
+
+    @ApiProperty()
+    @Prop()
+    shipmentCharge: number;
+
+    @ApiProperty()
+    @Prop()
+    advancedPayment: number;
 
     @ApiProperty({ type: [ProductInfo] })
     @Prop({
@@ -22,32 +54,17 @@ export class Order {
     })
     products: ProductInfo[];
 
-    // delivery details
-    @ApiProperty()
-    @Prop({ required: [true, 'Customer address is required'] })
-    address: string;
-
-    @ApiProperty()
-    @Prop({ required: [true, 'Customer city is required'] })
-    city: string;
-
-    @ApiProperty()
-    @Prop({ required: [true, 'Customer zone is required'] })
-    zone: string;
-
-    @ApiProperty()
-    @Prop({ required: [true, 'Delivery time is required'] })
-    deliveryTime: string;
-
-    // status
     @ApiProperty()
     @Prop({ default: 'pending' })
     status: string;
 
-    // cart total
     @ApiProperty()
-    @Prop({ required: [true, 'Cart total is required'] })
-    total: number;
+    @Prop({ required: [true, 'Cart item total is required'] })
+    itemTotal: number;
+
+    @ApiProperty()
+    @Prop({ required: [true, 'Cart grand total is required'] })
+    grandTotal: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
