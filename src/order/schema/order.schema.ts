@@ -41,8 +41,7 @@ export class Order {
 
     @ApiProperty()
     @Prop()
-    discount: number;
-    // TODO: save discount amount as percentage
+    discount: string;
 
     @ApiProperty()
     @Prop()
@@ -73,3 +72,7 @@ export class Order {
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
+
+OrderSchema.pre<Order>('save', async function () {
+    this.discount = `${this.discount}%`;
+});
