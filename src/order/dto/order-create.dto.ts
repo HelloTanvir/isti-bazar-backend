@@ -26,16 +26,68 @@ class ProductInfo {
     quantity: number;
 }
 
-export class OrderDto {
+export class OrderCreateDto {
     @ApiProperty({ example: 'Tanvir Hossain', description: 'Customer name' })
     @IsNotEmpty()
     @IsString()
-    name: string;
+    customerName: string;
 
     @ApiProperty({ example: '01325478641', description: 'Customer mobile number' })
     @IsNotEmpty()
     @IsString()
-    number: string;
+    customerNumber: string;
+
+    @ApiProperty({ example: 'Dhaka', description: 'Delivery city' })
+    @IsNotEmpty()
+    @IsString()
+    city: string;
+
+    @ApiProperty({ example: 'Sector - 10', description: 'Delivery zone' })
+    @IsNotEmpty()
+    @IsString()
+    zone: string;
+
+    @ApiProperty({ example: 'Mogher mulluk', description: 'Delivery area' })
+    @IsNotEmpty()
+    @IsString()
+    area: string;
+
+    @ApiProperty({ example: 'Uttara', description: 'Delivery address' })
+    @IsNotEmpty()
+    @IsString()
+    address: string;
+
+    @ApiProperty({
+        example: 'Abar ashben',
+        description: 'Special message for the customer',
+        required: false,
+    })
+    @IsNotEmpty()
+    @IsString()
+    specialMessage: string;
+
+    @ApiProperty({
+        example: '99.99',
+        description: 'Discount on the total of the order(in percentage)',
+        required: false,
+    })
+    @IsNotEmpty()
+    @IsString()
+    discount: number;
+
+    @ApiProperty({
+        example: '2',
+        description: 'Shipment charge of the order delivery',
+        required: false,
+    })
+    @IsNotEmpty()
+    @IsString()
+    shipment: number;
+
+    @ApiProperty({ example: '5', description: 'Advanced payment for the order', required: false })
+    @IsNotEmpty()
+    @IsString()
+    advancedPayment: number;
 
     @ApiProperty({ type: [ProductInfo] })
     @IsNotEmpty()
@@ -54,19 +106,4 @@ export class OrderDto {
     @ValidateNested({ each: true })
     @Type(() => ProductInfo)
     products: ProductInfo[];
-
-    @ApiProperty({ example: 'Uttara', description: 'Delivery address' })
-    @IsNotEmpty()
-    @IsString()
-    address: string;
-
-    @ApiProperty({ example: 'Dhaka', description: 'Delivery city' })
-    @IsNotEmpty()
-    @IsString()
-    city: string;
-
-    @ApiProperty({ example: 'Sector - 10', description: 'Delivery zone' })
-    @IsNotEmpty()
-    @IsString()
-    zone: string;
 }
