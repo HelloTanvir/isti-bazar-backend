@@ -7,8 +7,8 @@ import {
     // eslint-disable-next-line prettier/prettier
     ApiTags
 } from '@nestjs/swagger';
-import { OrderDto } from './dto';
-import { OrderUpdateDto } from './dto/order-update.dto';
+import { GetCurrentUser } from '../common/decorators';
+import { OrderCreateDto, OrderUpdateDto } from './dto';
 import { OrderService } from './order.service';
 import { Order } from './schema';
 
@@ -21,8 +21,11 @@ export class OrderController {
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Create an order' })
     @ApiCreatedResponse({ type: Order })
-    async create(@Body() dto: OrderDto): Promise<Order> {
-        return await this.orderService.create(dto);
+    async create(
+        @GetCurrentUser('userId') userId: string,
+        @Body() dto: OrderCreateDto
+    ): Promise<Order> {
+        return await this.orderService.create(userId, dto);
     }
 
     @Get()

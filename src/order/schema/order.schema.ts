@@ -8,6 +8,10 @@ export type OrderDocument = Order & Document;
 @Schema({ timestamps: true })
 export class Order {
     @ApiProperty()
+    @Prop({ required: [true, 'Product merchant id is required'] })
+    merchantId: string;
+
+    @ApiProperty()
     @Prop({ required: [true, 'Customer name is required'] })
     customerName: string;
 
@@ -38,6 +42,7 @@ export class Order {
     @ApiProperty()
     @Prop()
     discount: number;
+    // TODO: save discount amount as percentage
 
     @ApiProperty()
     @Prop()
