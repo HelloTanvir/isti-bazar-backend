@@ -15,5 +15,6 @@ import { StorageService } from './utils';
     ],
     controllers: [ProductController],
     providers: [ProductService, StorageService],
+    exports: [ProductService],
 })
 export class ProductModule {}
