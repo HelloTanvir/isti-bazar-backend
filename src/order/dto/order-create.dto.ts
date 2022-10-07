@@ -89,7 +89,7 @@ export class OrderCreateDto {
     @IsString()
     advancedPayment: number;
 
-    @ApiProperty({ type: [ProductInfo], isArray: true })
+    @ApiProperty({ type: ProductInfo, isArray: true })
     @IsNotEmpty()
     @Transform(
         ({ value }) => {
