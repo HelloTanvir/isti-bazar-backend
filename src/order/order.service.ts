@@ -65,8 +65,8 @@ export class OrderService {
         return order;
     }
 
-    async delete(id: string | number): Promise<Order> {
-        const order = await this.orderModel.findById(id);
+    async delete(userId: string, orderId: string): Promise<Order> {
+        const order = await this.orderModel.findOne({ merchantId: userId, _id: orderId });
         if (!order) {
             throw new ForbiddenException('order does not exist');
         }

@@ -60,12 +60,15 @@ export class OrderController {
         return await this.orderService.update(userId, orderId, dto);
     }
 
-    @Delete('/:id')
+    @Delete('/:orderId')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Delete an order' })
     @ApiOkResponse({ type: Order })
     @ApiBearerAuth()
-    async delete(@Param('id') id: string | number): Promise<Order> {
-        return await this.orderService.delete(id);
+    async delete(
+        @GetCurrentUser('userId') userId: string,
+        @Param('orderId') orderId: string
+    ): Promise<Order> {
+        return await this.orderService.delete(userId, orderId);
     }
 }
