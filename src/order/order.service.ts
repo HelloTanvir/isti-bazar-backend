@@ -29,8 +29,8 @@ export class OrderService {
             itemTotal += product.sellingPrice * p.quantity;
         }
 
-        const discountedTotal = itemTotal - (itemTotal * dto.discount) / 100;
-        const grandTotal = discountedTotal + dto.shipmentCharge;
+        const discountedTotal = itemTotal - (itemTotal * (dto.discount || 0)) / 100;
+        const grandTotal = discountedTotal + (dto.shipmentCharge || 0) - (dto.advancedPayment || 0);
 
         const newOrder = new this.orderModel({
             ...dto,

@@ -74,5 +74,5 @@ export class Order {
 export const OrderSchema = SchemaFactory.createForClass(Order);
 
 OrderSchema.pre<Order>('save', async function () {
-    this.discount = `${this.discount}%`;
+    this.discount = `${this.discount || 0}%`;
 });
