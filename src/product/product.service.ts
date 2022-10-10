@@ -99,6 +99,11 @@ export class ProductService {
         // delete product thumbnail image
         await this.storageService.deleteFile(product.thumbImageKey);
 
+        // delete product variants image
+        for (const variant of product.variants) {
+            await this.storageService.deleteFile(variant.variantImageKey);
+        }
+
         // reduce stock on category by the total shock of this product variants
         const category = await this.categoryModel.findOne({
             merchantId: userId,
