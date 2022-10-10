@@ -144,6 +144,9 @@ export class ProductService {
             variantImageKey: key,
         });
 
+        // increase stock on product
+        product.stock += dto.stock;
+
         await product.save();
 
         // increase stock on category by this variant's stock
@@ -189,6 +192,10 @@ export class ProductService {
             (dto as any).variantImageKey = key;
         }
 
+        // update stock on product
+        product.stock -= variant.stock;
+        product.stock += dto.stock;
+
         // update stock on category
         const category = await this.categoryModel.findOne({
             merchantId: userId,
@@ -221,6 +228,9 @@ export class ProductService {
 
         // delete variant image
         await this.storageService.deleteFile(product.variants[variantIndex].variantImageKey);
+
+        // reduce stock on product
+        product.stock -= product.variants[variantIndex].stock;
 
         // reduce stock on category by this variant's stock
         const category = await this.categoryModel.findOne({
