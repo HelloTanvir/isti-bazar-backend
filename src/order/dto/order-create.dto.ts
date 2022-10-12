@@ -4,6 +4,7 @@ import {
     IsArray,
     IsNotEmpty,
     IsNumber,
+    IsOptional,
     IsString,
     // eslint-disable-next-line prettier/prettier
     ValidateNested
@@ -62,6 +63,7 @@ export class OrderCreateDto {
         description: 'Special message for the customer',
         required: false,
     })
+    @IsOptional()
     @IsNotEmpty()
     @IsString()
     specialMessage: string;
@@ -71,8 +73,9 @@ export class OrderCreateDto {
         description: 'Discount on the total of the order(in percentage)',
         required: false,
     })
+    @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     discount: number;
 
     @ApiProperty({
@@ -80,13 +83,15 @@ export class OrderCreateDto {
         description: 'Shipment charge of the order delivery',
         required: false,
     })
+    @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     shipmentCharge: number;
 
     @ApiProperty({ example: '5', description: 'Advanced payment for the order', required: false })
+    @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     advancedPayment: number;
 
     @ApiProperty({ type: ProductInfo, isArray: true })
