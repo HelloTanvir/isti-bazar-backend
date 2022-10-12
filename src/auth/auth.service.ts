@@ -40,14 +40,14 @@ export class AuthService {
         const user = await this.userModel.findOne({ email: dto.email });
 
         if (!user) {
-            throw new ForbiddenException('invalid email or password');
+            throw new ForbiddenException('This email is not registered');
         }
 
         // compare user password
         const isPasswordMatch = await bcrypt.compare(dto.password, user.password);
 
         if (!isPasswordMatch) {
-            throw new ForbiddenException('invalid email or password');
+            throw new ForbiddenException('Invalid password');
         }
 
         const tokens = await this.getTokens(user._id.toString());
