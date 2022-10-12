@@ -75,7 +75,7 @@ export class OrderCreateDto {
     })
     @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     discount: number;
 
     @ApiProperty({
@@ -85,13 +85,13 @@ export class OrderCreateDto {
     })
     @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     shipmentCharge: number;
 
     @ApiProperty({ example: '5', description: 'Advanced payment for the order', required: false })
     @IsOptional()
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     advancedPayment: number;
 
     @ApiProperty({ type: ProductInfo, isArray: true })
