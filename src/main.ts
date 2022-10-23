@@ -8,6 +8,7 @@ async function bootstrap() {
 
     app.enableCors({
         origin: [
+            'https://hisabkori.vercel.app',
             'https://isti-bazar.vercel.app',
             'http://localhost:3000',
             'http://127.0.0.1:3000',
