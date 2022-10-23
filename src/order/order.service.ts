@@ -26,6 +26,14 @@ export class OrderService {
                 throw new ForbiddenException('variant does not exist');
             }
 
+            // add this variant as selected variant in DTO and then save on order DB
+            (dto as any).selectedVariant = variant;
+
+            // add other variants in DTO and then save on order DB
+            (dto as any).otherVariants = product.variants.filter(
+                (v) => (v as any)._id.toString() != p.variantId
+            );
+
             itemTotal += product.sellingPrice * p.quantity;
         }
 
