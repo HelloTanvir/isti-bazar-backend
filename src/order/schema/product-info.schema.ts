@@ -19,13 +19,15 @@ export class ProductInfo {
     })
     quantity: number;
 
-    // required extra fields
+    @Prop({ required: [true, 'Product name is required'] })
     @ApiProperty({ example: 'S' })
     productName: string;
 
+    @Prop({ required: [true, 'Selected variant is required'] })
     @ApiProperty({ type: Variant })
     selectedVariant: Variant;
 
+    @Prop({ required: [true, 'Other variant is required'] })
     @ApiProperty({ type: [Variant] })
     otherVariants: Variant[];
 }
