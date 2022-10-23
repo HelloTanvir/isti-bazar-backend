@@ -26,6 +26,9 @@ export class OrderService {
                 throw new ForbiddenException('variant does not exist');
             }
 
+            // add product name in DTO and then save on order DB
+            (dto as any).productName = product.name;
+
             // add this variant as selected variant in DTO and then save on order DB
             (dto as any).selectedVariant = variant;
 
