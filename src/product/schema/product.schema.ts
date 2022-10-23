@@ -53,7 +53,7 @@ export class Product {
     @Prop({ required: [true, 'Product description is required'] })
     description: string;
 
-    @ApiProperty({ type: [Variant], isArray: true })
+    @ApiProperty({ type: [Variant] })
     @Prop({ type: [VariantSchema], default: [] })
     variants: Variant[];
 }

@@ -10,7 +10,7 @@ import {
     ValidateNested
 } from 'class-validator';
 
-class ProductInfo {
+class ProductInformation {
     @ApiProperty({ example: 'r46frf1f6f46ef1', description: 'Ordered product id' })
     @IsNotEmpty()
     @IsString()
@@ -94,7 +94,7 @@ export class OrderCreateDto {
     @IsNumber()
     advancedPayment: number;
 
-    @ApiProperty({ type: ProductInfo, isArray: true })
+    @ApiProperty({ type: ProductInformation, isArray: true })
     @IsNotEmpty()
     @Transform(
         ({ value }) => {
@@ -109,6 +109,6 @@ export class OrderCreateDto {
     )
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => ProductInfo)
-    products: ProductInfo[];
+    @Type(() => ProductInformation)
+    products: ProductInformation[];
 }
