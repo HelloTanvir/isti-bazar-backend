@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Variant } from '../../product/schema';
+import { Variant, VariantSchema } from '../../product/schema';
 
 @Schema()
 export class ProductInfo {
@@ -23,11 +23,11 @@ export class ProductInfo {
     @ApiProperty({ example: 'S' })
     productName: string;
 
-    @Prop({ required: [true, 'Selected variant is required'] })
+    @Prop({ type: VariantSchema, required: [true, 'Selected variant is required'] })
     @ApiProperty({ type: Variant })
     selectedVariant: Variant;
 
-    @Prop({ required: [true, 'Other variant is required'] })
+    @Prop({ type: [VariantSchema], required: [true, 'Other variant is required'] })
     @ApiProperty({ type: [Variant] })
     otherVariants: Variant[];
 }
