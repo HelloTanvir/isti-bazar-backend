@@ -15,7 +15,9 @@ export class OrderService {
     async create(userId: string, dto: OrderCreateDto): Promise<Order> {
         let itemTotal = 0;
 
-        for (const p of dto.products) {
+        for (let i = 0; i < dto.products.length; i++) {
+            const p = dto.products[i];
+
             const product = await this.productService.findOne(userId, p.productId);
             if (!product) {
                 throw new ForbiddenException('product does not exist');
@@ -27,13 +29,13 @@ export class OrderService {
             }
 
             // add product name in DTO and then save on order DB
-            (dto as any).productName = product.name;
+            (dto as any).products[i].productName = product.name;
 
             // add this variant as selected variant in DTO and then save on order DB
-            (dto as any).selectedVariant = variant;
+            (dto as any).products[i].selectedVariant = variant;
 
             // add other variants in DTO and then save on order DB
-            (dto as any).otherVariants = product.variants.filter(
+            (dto as any).products[i].otherVariants = product.variants.filter(
                 (v) => (v as any)._id.toString() != p.variantId
             );
 
