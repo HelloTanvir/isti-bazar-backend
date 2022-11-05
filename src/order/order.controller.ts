@@ -51,19 +51,19 @@ export class OrderController {
         @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
         @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number,
         @Query('orderId') orderId: string,
-        @Query('merchantId') merchantId: string,
         @Query('status') status: string,
         @Query('customerName') customerName: string,
         @Query('customerNumber') customerNumber: string,
-        @Query('date') date: string
+        @Query('startDate') startDate: string,
+        @Query('endDate') endDate: string
     ): Promise<Order[]> {
         const filterQuery: FilterQuery = {
             _id: orderId,
-            merchantId,
             status,
             customerName,
             customerNumber,
-            updatedAt: date,
+            startDate,
+            endDate,
         };
 
         console.log(filterQuery);

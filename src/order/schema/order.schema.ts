@@ -44,10 +44,6 @@ export class Order {
     discount: string;
 
     @ApiProperty()
-    @Prop({ default: 0 })
-    shipmentCharge: number;
-
-    @ApiProperty()
     @Prop()
     advancedPayment: number;
 
