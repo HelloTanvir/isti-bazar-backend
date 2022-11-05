@@ -68,9 +68,18 @@ export class OrderService {
             // if any filter query option is empty, remove it from filter query
             if (filterQuery[key] === '') {
                 delete filterQuery[key];
-            } else if (key === 'startDate' || key === 'endDate') {
-                // if filter query option is date, convert it to date object
-                filterQuery[key] = new Date(filterQuery[key]);
+            } else if (key === 'startDate') {
+                // if filter query option has startDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $gte: new Date(filterQuery.startDate),
+                };
+            } else if (key === 'endDate') {
+                // if filter query option has endDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $lte: new Date(filterQuery.endDate),
+                };
             }
         });
 
