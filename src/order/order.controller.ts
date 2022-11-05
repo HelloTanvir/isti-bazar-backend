@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    DefaultValuePipe,
     Delete,
     Get,
     HttpCode,
@@ -21,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { GetCurrentUser } from '../common/decorators';
 import { OrderCreateDto, OrderUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { OrderService } from './order.service';
 import { Order } from './schema';
 
@@ -46,10 +48,27 @@ export class OrderController {
     @ApiOkResponse({ type: [Order] })
     async findAll(
         @GetCurrentUser('userId') userId: string,
-        @Query('page', new ParseIntPipe()) page = 1,
-        @Query('size', new ParseIntPipe()) size = 10
+        @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number,
+        @Query('orderId') orderId: string,
+        @Query('merchantId') merchantId: string,
+        @Query('status') status: string,
+        @Query('customerName') customerName: string,
+        @Query('customerNumber') customerNumber: string,
+        @Query('date') date: string
     ): Promise<Order[]> {
-        return await this.orderService.findAll(userId, page, size);
+        const filterQuery: FilterQuery = {
+            _id: orderId,
+            merchantId,
+            status,
+            customerName,
+            customerNumber,
+            updated_at: date,
+        };
+
+        console.log(filterQuery);
+
+        return await this.orderService.findAll(userId, page, size, filterQuery);
     }
 
     @Get('/:orderId')

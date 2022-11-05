@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ProductService } from '../product/product.service';
 import { OrderCreateDto, OrderUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { Order, OrderDocument } from './schema';
 
 @Injectable()
@@ -57,9 +58,21 @@ export class OrderService {
         return newOrder;
     }
 
-    async findAll(userId: string, page: number, size: number): Promise<Order[]> {
+    async findAll(
+        userId: string,
+        page: number,
+        size: number,
+        filterQuery: FilterQuery
+    ): Promise<Order[]> {
+        // check if any filter query option is empty
+        Object.keys(filterQuery).forEach((key) => {
+            if (filterQuery[key] === '') {
+                delete filterQuery[key];
+            }
+        });
+
         return await this.orderModel
-            .find({ merchantId: userId })
+            .find({ merchantId: userId, ...filterQuery })
             .skip((page - 1) * size)
             .limit(size);
     }
