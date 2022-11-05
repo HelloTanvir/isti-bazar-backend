@@ -78,16 +78,6 @@ export class OrderCreateDto {
     @IsNumber()
     discount: number;
 
-    @ApiProperty({
-        example: '2',
-        description: 'Shipment charge of the order delivery',
-        required: false,
-    })
-    @IsOptional()
-    @IsNotEmpty()
-    @IsNumber()
-    shipmentCharge: number;
-
     @ApiProperty({ example: '5', description: 'Advanced payment for the order', required: false })
     @IsOptional()
     @IsNotEmpty()
