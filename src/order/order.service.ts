@@ -72,13 +72,13 @@ export class OrderService {
                 filterQuery[key] === undefined
             ) {
                 delete filterQuery[key];
-            } else if (key === 'startDate') {
+            } else if (key === 'startDate' && filterQuery[key]) {
                 // if filter query option has startDate, convert this to Date object according to mongodb format
                 filterQuery.updatedAt = {
                     ...filterQuery.updatedAt,
                     $gte: new Date(filterQuery.startDate),
                 };
-            } else if (key === 'endDate') {
+            } else if (key === 'endDate' && filterQuery[key]) {
                 // if filter query option has endDate, convert this to Date object according to mongodb format
                 filterQuery.updatedAt = {
                     ...filterQuery.updatedAt,
