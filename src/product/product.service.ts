@@ -50,8 +50,8 @@ export class ProductService {
     async findAll(userId: string, page: number, size: number): Promise<Product[]> {
         return await this.productModel
             .find({ merchantId: userId })
-            .skip((page - 1) * size)
-            .limit(size);
+            .limit(size)
+            .skip((page - 1) * size);
     }
 
     async findOne(userId: string, productId: string): Promise<Product> {
