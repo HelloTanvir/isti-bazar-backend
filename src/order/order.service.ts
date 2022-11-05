@@ -64,15 +64,18 @@ export class OrderService {
         size: number,
         filterQuery: FilterQuery
     ): Promise<Order[]> {
-        // check if any filter query option is empty
         Object.keys(filterQuery).forEach((key) => {
+            // if any filter query option is empty, remove it from filter query
             if (filterQuery[key] === '') {
                 delete filterQuery[key];
+            } else if (key === 'startDate' || key === 'endDate') {
+                // if filter query option is date, convert it to date object
+                filterQuery[key] = new Date(filterQuery[key]);
             }
         });
 
         return await this.orderModel
-            .find({ merchantId: userId, ...filterQuery })
+            .find({ ...filterQuery, merchantId: userId })
             .skip((page - 1) * size)
             .limit(size);
     }
