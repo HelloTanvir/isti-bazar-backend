@@ -76,8 +76,8 @@ export class OrderService {
 
         return await this.orderModel
             .find({ ...filterQuery, merchantId: userId })
-            .skip((page - 1) * size)
-            .limit(size);
+            .limit(size)
+            .skip((page - 1) * size);
     }
 
     async findOne(userId: string, orderId: string): Promise<Order> {

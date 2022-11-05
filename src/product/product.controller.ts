@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    DefaultValuePipe,
     Delete,
     Get,
     HttpCode,
@@ -59,8 +60,8 @@ export class ProductController {
     @ApiOkResponse({ type: [Product], isArray: true })
     findAll(
         @GetCurrentUser('userId') userId: string,
-        @Query('page', new ParseIntPipe()) page = 1,
-        @Query('size', new ParseIntPipe()) size = 10
+        @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number
     ): Promise<Product[]> {
         return this.productService.findAll(userId, page, size);
     }
