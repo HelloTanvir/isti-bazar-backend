@@ -63,7 +63,7 @@ export class OrderController {
             status,
             customerName,
             customerNumber,
-            updated_at: date,
+            updatedAt: date,
         };
 
         console.log(filterQuery);

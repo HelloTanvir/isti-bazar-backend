@@ -4,5 +4,5 @@ export interface FilterQuery {
     status: string;
     customerName: string;
     customerNumber: string;
-    updated_at: string;
+    updatedAt: string;
 }
