@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Post,
+    // eslint-disable-next-line prettier/prettier
+    Query
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -32,8 +44,12 @@ export class OrderController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all orders' })
     @ApiOkResponse({ type: [Order] })
-    async findAll(@GetCurrentUser('userId') userId: string): Promise<Order[]> {
-        return await this.orderService.findAll(userId);
+    async findAll(
+        @GetCurrentUser('userId') userId: string,
+        @Query('page', new ParseIntPipe()) page = 1,
+        @Query('size', new ParseIntPipe()) size = 10
+    ): Promise<Order[]> {
+        return await this.orderService.findAll(userId, page, size);
     }
 
     @Get('/:orderId')

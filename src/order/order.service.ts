@@ -57,8 +57,11 @@ export class OrderService {
         return newOrder;
     }
 
-    async findAll(userId: string): Promise<Order[]> {
-        return await this.orderModel.find({ merchantId: userId });
+    async findAll(userId: string, page: number, size: number): Promise<Order[]> {
+        return await this.orderModel
+            .find({ merchantId: userId })
+            .skip((page - 1) * size)
+            .limit(size);
     }
 
     async findOne(userId: string, orderId: string): Promise<Order> {

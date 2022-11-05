@@ -47,8 +47,11 @@ export class ProductService {
         return newProduct;
     }
 
-    async findAll(userId: string): Promise<Product[]> {
-        return await this.productModel.find({ merchantId: userId });
+    async findAll(userId: string, page: number, size: number): Promise<Product[]> {
+        return await this.productModel
+            .find({ merchantId: userId })
+            .skip((page - 1) * size)
+            .limit(size);
     }
 
     async findOne(userId: string, productId: string): Promise<Product> {

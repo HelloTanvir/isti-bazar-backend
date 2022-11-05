@@ -6,7 +6,9 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    ParseIntPipe,
     Post,
+    Query,
     UploadedFile,
     UseFilters,
     // eslint-disable-next-line prettier/prettier
@@ -55,8 +57,12 @@ export class ProductController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Get all products' })
     @ApiOkResponse({ type: [Product], isArray: true })
-    findAll(@GetCurrentUser('userId') userId: string): Promise<Product[]> {
-        return this.productService.findAll(userId);
+    findAll(
+        @GetCurrentUser('userId') userId: string,
+        @Query('page', new ParseIntPipe()) page = 1,
+        @Query('size', new ParseIntPipe()) size = 10
+    ): Promise<Product[]> {
+        return this.productService.findAll(userId, page, size);
     }
 
     // get a product by id added by a merchant
