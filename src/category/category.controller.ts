@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    DefaultValuePipe,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Post,
+    // eslint-disable-next-line prettier/prettier
+    Query
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -10,6 +23,7 @@ import {
 import { GetCurrentUser } from '../common/decorators';
 import { CategoryService } from './category.service';
 import { CategoryDto, CategoryUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { Category } from './schema';
 
 @ApiTags('Categories')
@@ -30,8 +44,21 @@ export class CategoryController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all categories' })
     @ApiOkResponse({ type: [Category] })
-    findAll(@GetCurrentUser('userId') userId: string): Promise<Category[]> {
-        return this.categoryService.findAll(userId);
+    findAll(
+        @GetCurrentUser('userId') userId: string,
+        @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number,
+        @Query('name') name: string,
+        @Query('startDate') startDate: string,
+        @Query('endDate') endDate: string
+    ): Promise<Category[]> {
+        const filterQuery: FilterQuery = {
+            name,
+            startDate,
+            endDate,
+        };
+
+        return this.categoryService.findAll(userId, page, size, filterQuery);
     }
 
     @Get('/:categoryId')

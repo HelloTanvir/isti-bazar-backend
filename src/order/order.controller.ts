@@ -66,8 +66,6 @@ export class OrderController {
             endDate,
         };
 
-        console.log(filterQuery);
-
         return await this.orderService.findAll(userId, page, size, filterQuery);
     }
 
