@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CategoryDto, CategoryUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { Category, CategoryDocument } from './schema';
 
 @Injectable()
@@ -25,9 +26,37 @@ export class CategoryService {
         return newCategory;
     }
 
-    async findAll(userId: string, page: number, size: number): Promise<Category[]> {
+    async findAll(
+        userId: string,
+        page: number,
+        size: number,
+        filterQuery: FilterQuery
+    ): Promise<Category[]> {
+        Object.keys(filterQuery).forEach((key) => {
+            // if any filter query option is empty, remove it from filter query
+            if (
+                filterQuery[key] === '' ||
+                filterQuery[key] === null ||
+                filterQuery[key] === undefined
+            ) {
+                delete filterQuery[key];
+            } else if (key === 'startDate') {
+                // if filter query option has startDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $gte: new Date(filterQuery.startDate),
+                };
+            } else if (key === 'endDate') {
+                // if filter query option has endDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $lte: new Date(filterQuery.endDate),
+                };
+            }
+        });
+
         return await this.categoryModel
-            .find({ merchantId: userId })
+            .find({ ...filterQuery, merchantId: userId })
             .limit(size)
             .skip((page - 1) * size);
     }

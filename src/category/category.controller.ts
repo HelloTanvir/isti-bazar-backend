@@ -23,6 +23,7 @@ import {
 import { GetCurrentUser } from '../common/decorators';
 import { CategoryService } from './category.service';
 import { CategoryDto, CategoryUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { Category } from './schema';
 
 @ApiTags('Categories')
@@ -46,9 +47,18 @@ export class CategoryController {
     findAll(
         @GetCurrentUser('userId') userId: string,
         @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
-        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number,
+        @Query('name') name: string,
+        @Query('startDate') startDate: string,
+        @Query('endDate') endDate: string
     ): Promise<Category[]> {
-        return this.categoryService.findAll(userId, page, size);
+        const filterQuery: FilterQuery = {
+            name,
+            startDate,
+            endDate,
+        };
+
+        return this.categoryService.findAll(userId, page, size, filterQuery);
     }
 
     @Get('/:categoryId')
