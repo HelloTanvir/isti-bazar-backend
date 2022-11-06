@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../category/schema';
 import { ProductDto, ProductUpdateDto, VariantCreateDto, VariantUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { Product, ProductDocument } from './schema';
 import { StorageService } from './utils';
 
@@ -47,9 +48,37 @@ export class ProductService {
         return newProduct;
     }
 
-    async findAll(userId: string, page: number, size: number): Promise<Product[]> {
+    async findAll(
+        userId: string,
+        page: number,
+        size: number,
+        filterQuery: FilterQuery
+    ): Promise<Product[]> {
+        Object.keys(filterQuery).forEach((key) => {
+            // if any filter query option is empty, remove it from filter query
+            if (
+                filterQuery[key] === '' ||
+                filterQuery[key] === null ||
+                filterQuery[key] === undefined
+            ) {
+                delete filterQuery[key];
+            } else if (key === 'startDate') {
+                // if filter query option has startDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $gte: new Date(filterQuery.startDate),
+                };
+            } else if (key === 'endDate') {
+                // if filter query option has endDate, convert this to Date object according to mongodb format
+                filterQuery.updatedAt = {
+                    ...filterQuery.updatedAt,
+                    $lte: new Date(filterQuery.endDate),
+                };
+            }
+        });
+
         return await this.productModel
-            .find({ merchantId: userId })
+            .find({ ...filterQuery, merchantId: userId })
             .limit(size)
             .skip((page - 1) * size);
     }

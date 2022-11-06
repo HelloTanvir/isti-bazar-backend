@@ -27,6 +27,7 @@ import {
 } from '@nestjs/swagger';
 import { GetCurrentUser } from '../common/decorators';
 import { ProductDto, ProductUpdateDto, VariantCreateDto, VariantUpdateDto } from './dto';
+import { FilterQuery } from './interfaces';
 import { ProductService } from './product.service';
 import { Product } from './schema';
 import { HttpExceptionFilter, imageUploadOptions } from './utils';
@@ -61,9 +62,20 @@ export class ProductController {
     findAll(
         @GetCurrentUser('userId') userId: string,
         @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
-        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number,
+        @Query('name') name: string,
+        @Query('category') category: string,
+        @Query('startDate') startDate: string,
+        @Query('endDate') endDate: string
     ): Promise<Product[]> {
-        return this.productService.findAll(userId, page, size);
+        const filterQuery: FilterQuery = {
+            name,
+            category,
+            startDate,
+            endDate,
+        };
+
+        return this.productService.findAll(userId, page, size, filterQuery);
     }
 
     // get a product by id added by a merchant
