@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    DefaultValuePipe,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Post,
+    // eslint-disable-next-line prettier/prettier
+    Query
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -30,8 +43,12 @@ export class CategoryController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Gel all categories' })
     @ApiOkResponse({ type: [Category] })
-    findAll(@GetCurrentUser('userId') userId: string): Promise<Category[]> {
-        return this.categoryService.findAll(userId);
+    findAll(
+        @GetCurrentUser('userId') userId: string,
+        @Query('page', new DefaultValuePipe(1), new ParseIntPipe()) page: number,
+        @Query('size', new DefaultValuePipe(10), new ParseIntPipe()) size: number
+    ): Promise<Category[]> {
+        return this.categoryService.findAll(userId, page, size);
     }
 
     @Get('/:categoryId')

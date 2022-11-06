@@ -25,8 +25,11 @@ export class CategoryService {
         return newCategory;
     }
 
-    async findAll(userId: string): Promise<Category[]> {
-        return await this.categoryModel.find({ merchantId: userId });
+    async findAll(userId: string, page: number, size: number): Promise<Category[]> {
+        return await this.categoryModel
+            .find({ merchantId: userId })
+            .limit(size)
+            .skip((page - 1) * size);
     }
 
     async findOne(userId: string, categoryId: string): Promise<Category> {
