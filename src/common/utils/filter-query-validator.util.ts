@@ -19,6 +19,10 @@ export const getValidFilterQuery = (filterQuery: any) => {
                 ...filterQuery.updatedAt,
                 $lte: new Date(filterQuery.endDate),
             };
+        } else {
+            // if filter query option is not empty, convert this to RegExp object and structure it according to mongodb format
+            const filterRegExp = new RegExp(filterQuery[key], 'i');
+            filterQuery[key] = { $regex: filterRegExp };
         }
     });
 
